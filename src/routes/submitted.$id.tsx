@@ -4,7 +4,7 @@ import { useStore, selectRequest } from "@/mock/store";
 import { StateBadge } from "@/components/shared/StateBadge";
 import { CheckCircle2 } from "lucide-react";
 
-export const Route = createFileRoute("/intake/submitted/$id")({
+export const Route = createFileRoute("/submitted/$id")({
   head: () => ({ meta: [{ title: "Request submitted — LeaseMate" }] }),
   component: Submitted,
 });
