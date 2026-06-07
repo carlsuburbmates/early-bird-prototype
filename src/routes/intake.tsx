@@ -121,7 +121,7 @@ function Intake() {
       createdAt: new Date().toISOString(),
     };
     submitRequest(req);
-    navigate({ to: "/intake/submitted/$id", params: { id: req.id } });
+    navigate({ to: "/submitted/$id", params: { id: req.id } });
   };
 
   return (
