@@ -9,38 +9,277 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ProviderRouteImport } from './routes/provider'
+import { Route as OpsRouteImport } from './routes/ops'
+import { Route as IntakeRouteImport } from './routes/intake'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as ForProvidersRouteImport } from './routes/for-providers'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OpsIndexRouteImport } from './routes/ops.index'
+import { Route as SubmittedIdRouteImport } from './routes/submitted.$id'
+import { Route as OpsRequestsRouteImport } from './routes/ops.requests'
+import { Route as OpsProvidersRouteImport } from './routes/ops.providers'
+import { Route as OpsExceptionsRouteImport } from './routes/ops.exceptions'
+import { Route as OpsAutomationsRouteImport } from './routes/ops.automations'
+import { Route as OpsAuditRouteImport } from './routes/ops.audit'
+import { Route as OpsRequestsIdRouteImport } from './routes/ops.requests.$id'
 
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProviderRoute = ProviderRouteImport.update({
+  id: '/provider',
+  path: '/provider',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpsRoute = OpsRouteImport.update({
+  id: '/ops',
+  path: '/ops',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntakeRoute = IntakeRouteImport.update({
+  id: '/intake',
+  path: '/intake',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForProvidersRoute = ForProvidersRouteImport.update({
+  id: '/for-providers',
+  path: '/for-providers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OpsIndexRoute = OpsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OpsRoute,
+} as any)
+const SubmittedIdRoute = SubmittedIdRouteImport.update({
+  id: '/submitted/$id',
+  path: '/submitted/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpsRequestsRoute = OpsRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => OpsRoute,
+} as any)
+const OpsProvidersRoute = OpsProvidersRouteImport.update({
+  id: '/providers',
+  path: '/providers',
+  getParentRoute: () => OpsRoute,
+} as any)
+const OpsExceptionsRoute = OpsExceptionsRouteImport.update({
+  id: '/exceptions',
+  path: '/exceptions',
+  getParentRoute: () => OpsRoute,
+} as any)
+const OpsAutomationsRoute = OpsAutomationsRouteImport.update({
+  id: '/automations',
+  path: '/automations',
+  getParentRoute: () => OpsRoute,
+} as any)
+const OpsAuditRoute = OpsAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => OpsRoute,
+} as any)
+const OpsRequestsIdRoute = OpsRequestsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => OpsRequestsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/faq': typeof FaqRoute
+  '/for-providers': typeof ForProvidersRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/intake': typeof IntakeRoute
+  '/ops': typeof OpsRouteWithChildren
+  '/provider': typeof ProviderRoute
+  '/services': typeof ServicesRoute
+  '/ops/audit': typeof OpsAuditRoute
+  '/ops/automations': typeof OpsAutomationsRoute
+  '/ops/exceptions': typeof OpsExceptionsRoute
+  '/ops/providers': typeof OpsProvidersRoute
+  '/ops/requests': typeof OpsRequestsRouteWithChildren
+  '/submitted/$id': typeof SubmittedIdRoute
+  '/ops/': typeof OpsIndexRoute
+  '/ops/requests/$id': typeof OpsRequestsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/faq': typeof FaqRoute
+  '/for-providers': typeof ForProvidersRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/intake': typeof IntakeRoute
+  '/provider': typeof ProviderRoute
+  '/services': typeof ServicesRoute
+  '/ops/audit': typeof OpsAuditRoute
+  '/ops/automations': typeof OpsAutomationsRoute
+  '/ops/exceptions': typeof OpsExceptionsRoute
+  '/ops/providers': typeof OpsProvidersRoute
+  '/ops/requests': typeof OpsRequestsRouteWithChildren
+  '/submitted/$id': typeof SubmittedIdRoute
+  '/ops': typeof OpsIndexRoute
+  '/ops/requests/$id': typeof OpsRequestsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/faq': typeof FaqRoute
+  '/for-providers': typeof ForProvidersRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/intake': typeof IntakeRoute
+  '/ops': typeof OpsRouteWithChildren
+  '/provider': typeof ProviderRoute
+  '/services': typeof ServicesRoute
+  '/ops/audit': typeof OpsAuditRoute
+  '/ops/automations': typeof OpsAutomationsRoute
+  '/ops/exceptions': typeof OpsExceptionsRoute
+  '/ops/providers': typeof OpsProvidersRoute
+  '/ops/requests': typeof OpsRequestsRouteWithChildren
+  '/submitted/$id': typeof SubmittedIdRoute
+  '/ops/': typeof OpsIndexRoute
+  '/ops/requests/$id': typeof OpsRequestsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/faq'
+    | '/for-providers'
+    | '/how-it-works'
+    | '/intake'
+    | '/ops'
+    | '/provider'
+    | '/services'
+    | '/ops/audit'
+    | '/ops/automations'
+    | '/ops/exceptions'
+    | '/ops/providers'
+    | '/ops/requests'
+    | '/submitted/$id'
+    | '/ops/'
+    | '/ops/requests/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/faq'
+    | '/for-providers'
+    | '/how-it-works'
+    | '/intake'
+    | '/provider'
+    | '/services'
+    | '/ops/audit'
+    | '/ops/automations'
+    | '/ops/exceptions'
+    | '/ops/providers'
+    | '/ops/requests'
+    | '/submitted/$id'
+    | '/ops'
+    | '/ops/requests/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/faq'
+    | '/for-providers'
+    | '/how-it-works'
+    | '/intake'
+    | '/ops'
+    | '/provider'
+    | '/services'
+    | '/ops/audit'
+    | '/ops/automations'
+    | '/ops/exceptions'
+    | '/ops/providers'
+    | '/ops/requests'
+    | '/submitted/$id'
+    | '/ops/'
+    | '/ops/requests/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FaqRoute: typeof FaqRoute
+  ForProvidersRoute: typeof ForProvidersRoute
+  HowItWorksRoute: typeof HowItWorksRoute
+  IntakeRoute: typeof IntakeRoute
+  OpsRoute: typeof OpsRouteWithChildren
+  ProviderRoute: typeof ProviderRoute
+  ServicesRoute: typeof ServicesRoute
+  SubmittedIdRoute: typeof SubmittedIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/provider': {
+      id: '/provider'
+      path: '/provider'
+      fullPath: '/provider'
+      preLoaderRoute: typeof ProviderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ops': {
+      id: '/ops'
+      path: '/ops'
+      fullPath: '/ops'
+      preLoaderRoute: typeof OpsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intake': {
+      id: '/intake'
+      path: '/intake'
+      fullPath: '/intake'
+      preLoaderRoute: typeof IntakeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-providers': {
+      id: '/for-providers'
+      path: '/for-providers'
+      fullPath: '/for-providers'
+      preLoaderRoute: typeof ForProvidersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +287,107 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ops/': {
+      id: '/ops/'
+      path: '/'
+      fullPath: '/ops/'
+      preLoaderRoute: typeof OpsIndexRouteImport
+      parentRoute: typeof OpsRoute
+    }
+    '/submitted/$id': {
+      id: '/submitted/$id'
+      path: '/submitted/$id'
+      fullPath: '/submitted/$id'
+      preLoaderRoute: typeof SubmittedIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ops/requests': {
+      id: '/ops/requests'
+      path: '/requests'
+      fullPath: '/ops/requests'
+      preLoaderRoute: typeof OpsRequestsRouteImport
+      parentRoute: typeof OpsRoute
+    }
+    '/ops/providers': {
+      id: '/ops/providers'
+      path: '/providers'
+      fullPath: '/ops/providers'
+      preLoaderRoute: typeof OpsProvidersRouteImport
+      parentRoute: typeof OpsRoute
+    }
+    '/ops/exceptions': {
+      id: '/ops/exceptions'
+      path: '/exceptions'
+      fullPath: '/ops/exceptions'
+      preLoaderRoute: typeof OpsExceptionsRouteImport
+      parentRoute: typeof OpsRoute
+    }
+    '/ops/automations': {
+      id: '/ops/automations'
+      path: '/automations'
+      fullPath: '/ops/automations'
+      preLoaderRoute: typeof OpsAutomationsRouteImport
+      parentRoute: typeof OpsRoute
+    }
+    '/ops/audit': {
+      id: '/ops/audit'
+      path: '/audit'
+      fullPath: '/ops/audit'
+      preLoaderRoute: typeof OpsAuditRouteImport
+      parentRoute: typeof OpsRoute
+    }
+    '/ops/requests/$id': {
+      id: '/ops/requests/$id'
+      path: '/$id'
+      fullPath: '/ops/requests/$id'
+      preLoaderRoute: typeof OpsRequestsIdRouteImport
+      parentRoute: typeof OpsRequestsRoute
+    }
   }
 }
 
+interface OpsRequestsRouteChildren {
+  OpsRequestsIdRoute: typeof OpsRequestsIdRoute
+}
+
+const OpsRequestsRouteChildren: OpsRequestsRouteChildren = {
+  OpsRequestsIdRoute: OpsRequestsIdRoute,
+}
+
+const OpsRequestsRouteWithChildren = OpsRequestsRoute._addFileChildren(
+  OpsRequestsRouteChildren,
+)
+
+interface OpsRouteChildren {
+  OpsAuditRoute: typeof OpsAuditRoute
+  OpsAutomationsRoute: typeof OpsAutomationsRoute
+  OpsExceptionsRoute: typeof OpsExceptionsRoute
+  OpsProvidersRoute: typeof OpsProvidersRoute
+  OpsRequestsRoute: typeof OpsRequestsRouteWithChildren
+  OpsIndexRoute: typeof OpsIndexRoute
+}
+
+const OpsRouteChildren: OpsRouteChildren = {
+  OpsAuditRoute: OpsAuditRoute,
+  OpsAutomationsRoute: OpsAutomationsRoute,
+  OpsExceptionsRoute: OpsExceptionsRoute,
+  OpsProvidersRoute: OpsProvidersRoute,
+  OpsRequestsRoute: OpsRequestsRouteWithChildren,
+  OpsIndexRoute: OpsIndexRoute,
+}
+
+const OpsRouteWithChildren = OpsRoute._addFileChildren(OpsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FaqRoute: FaqRoute,
+  ForProvidersRoute: ForProvidersRoute,
+  HowItWorksRoute: HowItWorksRoute,
+  IntakeRoute: IntakeRoute,
+  OpsRoute: OpsRouteWithChildren,
+  ProviderRoute: ProviderRoute,
+  ServicesRoute: ServicesRoute,
+  SubmittedIdRoute: SubmittedIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
