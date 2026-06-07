@@ -15,6 +15,7 @@ import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ForProvidersRouteImport } from './routes/for-providers'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as IntakeSubmittedIdRouteImport } from './routes/intake.submitted.$id'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -46,22 +47,29 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IntakeSubmittedIdRoute = IntakeSubmittedIdRouteImport.update({
+  id: '/submitted/$id',
+  path: '/submitted/$id',
+  getParentRoute: () => IntakeRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/faq': typeof FaqRoute
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/intake': typeof IntakeRoute
+  '/intake': typeof IntakeRouteWithChildren
   '/services': typeof ServicesRoute
+  '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/faq': typeof FaqRoute
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/intake': typeof IntakeRoute
+  '/intake': typeof IntakeRouteWithChildren
   '/services': typeof ServicesRoute
+  '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -69,8 +77,9 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
-  '/intake': typeof IntakeRoute
+  '/intake': typeof IntakeRouteWithChildren
   '/services': typeof ServicesRoute
+  '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/intake'
     | '/services'
+    | '/intake/submitted/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/intake'
     | '/services'
+    | '/intake/submitted/$id'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/intake'
     | '/services'
+    | '/intake/submitted/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -104,7 +116,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   ForProvidersRoute: typeof ForProvidersRoute
   HowItWorksRoute: typeof HowItWorksRoute
-  IntakeRoute: typeof IntakeRoute
+  IntakeRoute: typeof IntakeRouteWithChildren
   ServicesRoute: typeof ServicesRoute
 }
 
@@ -152,17 +164,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/intake/submitted/$id': {
+      id: '/intake/submitted/$id'
+      path: '/submitted/$id'
+      fullPath: '/intake/submitted/$id'
+      preLoaderRoute: typeof IntakeSubmittedIdRouteImport
+      parentRoute: typeof IntakeRoute
+    }
   }
 }
+
+interface IntakeRouteChildren {
+  IntakeSubmittedIdRoute: typeof IntakeSubmittedIdRoute
+}
+
+const IntakeRouteChildren: IntakeRouteChildren = {
+  IntakeSubmittedIdRoute: IntakeSubmittedIdRoute,
+}
+
+const IntakeRouteWithChildren =
+  IntakeRoute._addFileChildren(IntakeRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FaqRoute: FaqRoute,
   ForProvidersRoute: ForProvidersRoute,
   HowItWorksRoute: HowItWorksRoute,
-  IntakeRoute: IntakeRoute,
+  IntakeRoute: IntakeRouteWithChildren,
   ServicesRoute: ServicesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
