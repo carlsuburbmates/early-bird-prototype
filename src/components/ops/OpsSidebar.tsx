@@ -2,14 +2,15 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { LayoutDashboard, Inbox, AlertTriangle, Workflow, FileClock, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const NAV = [
+type NavItem = { to: string; label: string; Icon: typeof LayoutDashboard; exact?: boolean };
+const NAV: NavItem[] = [
   { to: "/ops", label: "Dashboard", Icon: LayoutDashboard, exact: true },
   { to: "/ops/requests", label: "Requests", Icon: Inbox },
   { to: "/ops/providers", label: "Providers", Icon: Users },
   { to: "/ops/exceptions", label: "Exceptions", Icon: AlertTriangle },
   { to: "/ops/automations", label: "Automations", Icon: Workflow },
   { to: "/ops/audit", label: "Audit log", Icon: FileClock },
-] as const;
+];
 
 export function OpsSidebar() {
   const path = useRouterState({ select: (r) => r.location.pathname });
