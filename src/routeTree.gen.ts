@@ -19,6 +19,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OpsIndexRouteImport } from './routes/ops.index'
 import { Route as OpsRequestsRouteImport } from './routes/ops.requests'
+import { Route as OpsRequestsIdRouteImport } from './routes/ops.requests.$id'
 import { Route as IntakeSubmittedIdRouteImport } from './routes/intake.submitted.$id'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -71,6 +72,11 @@ const OpsRequestsRoute = OpsRequestsRouteImport.update({
   path: '/requests',
   getParentRoute: () => OpsRoute,
 } as any)
+const OpsRequestsIdRoute = OpsRequestsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => OpsRequestsRoute,
+} as any)
 const IntakeSubmittedIdRoute = IntakeSubmittedIdRouteImport.update({
   id: '/submitted/$id',
   path: '/submitted/$id',
@@ -86,9 +92,10 @@ export interface FileRoutesByFullPath {
   '/ops': typeof OpsRouteWithChildren
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
-  '/ops/requests': typeof OpsRequestsRoute
+  '/ops/requests': typeof OpsRequestsRouteWithChildren
   '/ops/': typeof OpsIndexRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
+  '/ops/requests/$id': typeof OpsRequestsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -98,9 +105,10 @@ export interface FileRoutesByTo {
   '/intake': typeof IntakeRouteWithChildren
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
-  '/ops/requests': typeof OpsRequestsRoute
+  '/ops/requests': typeof OpsRequestsRouteWithChildren
   '/ops': typeof OpsIndexRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
+  '/ops/requests/$id': typeof OpsRequestsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -112,9 +120,10 @@ export interface FileRoutesById {
   '/ops': typeof OpsRouteWithChildren
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
-  '/ops/requests': typeof OpsRequestsRoute
+  '/ops/requests': typeof OpsRequestsRouteWithChildren
   '/ops/': typeof OpsIndexRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
+  '/ops/requests/$id': typeof OpsRequestsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/ops/requests'
     | '/ops/'
     | '/intake/submitted/$id'
+    | '/ops/requests/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
     | '/ops/requests'
     | '/ops'
     | '/intake/submitted/$id'
+    | '/ops/requests/$id'
   id:
     | '__root__'
     | '/'
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '/ops/requests'
     | '/ops/'
     | '/intake/submitted/$id'
+    | '/ops/requests/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -240,6 +252,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OpsRequestsRouteImport
       parentRoute: typeof OpsRoute
     }
+    '/ops/requests/$id': {
+      id: '/ops/requests/$id'
+      path: '/$id'
+      fullPath: '/ops/requests/$id'
+      preLoaderRoute: typeof OpsRequestsIdRouteImport
+      parentRoute: typeof OpsRequestsRoute
+    }
     '/intake/submitted/$id': {
       id: '/intake/submitted/$id'
       path: '/submitted/$id'
@@ -261,13 +280,25 @@ const IntakeRouteChildren: IntakeRouteChildren = {
 const IntakeRouteWithChildren =
   IntakeRoute._addFileChildren(IntakeRouteChildren)
 
+interface OpsRequestsRouteChildren {
+  OpsRequestsIdRoute: typeof OpsRequestsIdRoute
+}
+
+const OpsRequestsRouteChildren: OpsRequestsRouteChildren = {
+  OpsRequestsIdRoute: OpsRequestsIdRoute,
+}
+
+const OpsRequestsRouteWithChildren = OpsRequestsRoute._addFileChildren(
+  OpsRequestsRouteChildren,
+)
+
 interface OpsRouteChildren {
-  OpsRequestsRoute: typeof OpsRequestsRoute
+  OpsRequestsRoute: typeof OpsRequestsRouteWithChildren
   OpsIndexRoute: typeof OpsIndexRoute
 }
 
 const OpsRouteChildren: OpsRouteChildren = {
-  OpsRequestsRoute: OpsRequestsRoute,
+  OpsRequestsRoute: OpsRequestsRouteWithChildren,
   OpsIndexRoute: OpsIndexRoute,
 }
 
