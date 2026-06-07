@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ProviderRouteImport } from './routes/provider'
 import { Route as IntakeRouteImport } from './routes/intake'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ForProvidersRouteImport } from './routes/for-providers'
@@ -20,6 +21,11 @@ import { Route as IntakeSubmittedIdRouteImport } from './routes/intake.submitted
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProviderRoute = ProviderRouteImport.update({
+  id: '/provider',
+  path: '/provider',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IntakeRoute = IntakeRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
   '/intake': typeof IntakeRouteWithChildren
+  '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
   '/intake': typeof IntakeRouteWithChildren
+  '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
   '/intake': typeof IntakeRouteWithChildren
+  '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/for-providers'
     | '/how-it-works'
     | '/intake'
+    | '/provider'
     | '/services'
     | '/intake/submitted/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/for-providers'
     | '/how-it-works'
     | '/intake'
+    | '/provider'
     | '/services'
     | '/intake/submitted/$id'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/for-providers'
     | '/how-it-works'
     | '/intake'
+    | '/provider'
     | '/services'
     | '/intake/submitted/$id'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   ForProvidersRoute: typeof ForProvidersRoute
   HowItWorksRoute: typeof HowItWorksRoute
   IntakeRoute: typeof IntakeRouteWithChildren
+  ProviderRoute: typeof ProviderRoute
   ServicesRoute: typeof ServicesRoute
 }
 
@@ -127,6 +140,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/provider': {
+      id: '/provider'
+      path: '/provider'
+      fullPath: '/provider'
+      preLoaderRoute: typeof ProviderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/intake': {
@@ -191,6 +211,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForProvidersRoute: ForProvidersRoute,
   HowItWorksRoute: HowItWorksRoute,
   IntakeRoute: IntakeRouteWithChildren,
+  ProviderRoute: ProviderRoute,
   ServicesRoute: ServicesRoute,
 }
 export const routeTree = rootRouteImport
