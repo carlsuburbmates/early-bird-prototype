@@ -17,6 +17,7 @@ import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ForProvidersRouteImport } from './routes/for-providers'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OpsIndexRouteImport } from './routes/ops.index'
 import { Route as IntakeSubmittedIdRouteImport } from './routes/intake.submitted.$id'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -59,6 +60,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OpsIndexRoute = OpsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OpsRoute,
+} as any)
 const IntakeSubmittedIdRoute = IntakeSubmittedIdRouteImport.update({
   id: '/submitted/$id',
   path: '/submitted/$id',
@@ -71,9 +77,10 @@ export interface FileRoutesByFullPath {
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
   '/intake': typeof IntakeRouteWithChildren
-  '/ops': typeof OpsRoute
+  '/ops': typeof OpsRouteWithChildren
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
+  '/ops/': typeof OpsIndexRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
 }
 export interface FileRoutesByTo {
@@ -82,9 +89,9 @@ export interface FileRoutesByTo {
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
   '/intake': typeof IntakeRouteWithChildren
-  '/ops': typeof OpsRoute
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
+  '/ops': typeof OpsIndexRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
 }
 export interface FileRoutesById {
@@ -94,9 +101,10 @@ export interface FileRoutesById {
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
   '/intake': typeof IntakeRouteWithChildren
-  '/ops': typeof OpsRoute
+  '/ops': typeof OpsRouteWithChildren
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
+  '/ops/': typeof OpsIndexRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +118,7 @@ export interface FileRouteTypes {
     | '/ops'
     | '/provider'
     | '/services'
+    | '/ops/'
     | '/intake/submitted/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -118,9 +127,9 @@ export interface FileRouteTypes {
     | '/for-providers'
     | '/how-it-works'
     | '/intake'
-    | '/ops'
     | '/provider'
     | '/services'
+    | '/ops'
     | '/intake/submitted/$id'
   id:
     | '__root__'
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/ops'
     | '/provider'
     | '/services'
+    | '/ops/'
     | '/intake/submitted/$id'
   fileRoutesById: FileRoutesById
 }
@@ -141,7 +151,7 @@ export interface RootRouteChildren {
   ForProvidersRoute: typeof ForProvidersRoute
   HowItWorksRoute: typeof HowItWorksRoute
   IntakeRoute: typeof IntakeRouteWithChildren
-  OpsRoute: typeof OpsRoute
+  OpsRoute: typeof OpsRouteWithChildren
   ProviderRoute: typeof ProviderRoute
   ServicesRoute: typeof ServicesRoute
 }
@@ -204,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ops/': {
+      id: '/ops/'
+      path: '/'
+      fullPath: '/ops/'
+      preLoaderRoute: typeof OpsIndexRouteImport
+      parentRoute: typeof OpsRoute
+    }
     '/intake/submitted/$id': {
       id: '/intake/submitted/$id'
       path: '/submitted/$id'
@@ -225,13 +242,23 @@ const IntakeRouteChildren: IntakeRouteChildren = {
 const IntakeRouteWithChildren =
   IntakeRoute._addFileChildren(IntakeRouteChildren)
 
+interface OpsRouteChildren {
+  OpsIndexRoute: typeof OpsIndexRoute
+}
+
+const OpsRouteChildren: OpsRouteChildren = {
+  OpsIndexRoute: OpsIndexRoute,
+}
+
+const OpsRouteWithChildren = OpsRoute._addFileChildren(OpsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FaqRoute: FaqRoute,
   ForProvidersRoute: ForProvidersRoute,
   HowItWorksRoute: HowItWorksRoute,
   IntakeRoute: IntakeRouteWithChildren,
-  OpsRoute: OpsRoute,
+  OpsRoute: OpsRouteWithChildren,
   ProviderRoute: ProviderRoute,
   ServicesRoute: ServicesRoute,
 }
