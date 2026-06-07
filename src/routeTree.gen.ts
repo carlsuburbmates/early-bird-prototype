@@ -22,6 +22,7 @@ import { Route as OpsRequestsRouteImport } from './routes/ops.requests'
 import { Route as OpsProvidersRouteImport } from './routes/ops.providers'
 import { Route as OpsExceptionsRouteImport } from './routes/ops.exceptions'
 import { Route as OpsAutomationsRouteImport } from './routes/ops.automations'
+import { Route as OpsAuditRouteImport } from './routes/ops.audit'
 import { Route as OpsRequestsIdRouteImport } from './routes/ops.requests.$id'
 import { Route as IntakeSubmittedIdRouteImport } from './routes/intake.submitted.$id'
 
@@ -90,6 +91,11 @@ const OpsAutomationsRoute = OpsAutomationsRouteImport.update({
   path: '/automations',
   getParentRoute: () => OpsRoute,
 } as any)
+const OpsAuditRoute = OpsAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => OpsRoute,
+} as any)
 const OpsRequestsIdRoute = OpsRequestsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/ops': typeof OpsRouteWithChildren
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
+  '/ops/audit': typeof OpsAuditRoute
   '/ops/automations': typeof OpsAutomationsRoute
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/providers': typeof OpsProvidersRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/intake': typeof IntakeRouteWithChildren
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
+  '/ops/audit': typeof OpsAuditRoute
   '/ops/automations': typeof OpsAutomationsRoute
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/providers': typeof OpsProvidersRoute
@@ -144,6 +152,7 @@ export interface FileRoutesById {
   '/ops': typeof OpsRouteWithChildren
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
+  '/ops/audit': typeof OpsAuditRoute
   '/ops/automations': typeof OpsAutomationsRoute
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/providers': typeof OpsProvidersRoute
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
     | '/ops'
     | '/provider'
     | '/services'
+    | '/ops/audit'
     | '/ops/automations'
     | '/ops/exceptions'
     | '/ops/providers'
@@ -179,6 +189,7 @@ export interface FileRouteTypes {
     | '/intake'
     | '/provider'
     | '/services'
+    | '/ops/audit'
     | '/ops/automations'
     | '/ops/exceptions'
     | '/ops/providers'
@@ -196,6 +207,7 @@ export interface FileRouteTypes {
     | '/ops'
     | '/provider'
     | '/services'
+    | '/ops/audit'
     | '/ops/automations'
     | '/ops/exceptions'
     | '/ops/providers'
@@ -309,6 +321,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OpsAutomationsRouteImport
       parentRoute: typeof OpsRoute
     }
+    '/ops/audit': {
+      id: '/ops/audit'
+      path: '/audit'
+      fullPath: '/ops/audit'
+      preLoaderRoute: typeof OpsAuditRouteImport
+      parentRoute: typeof OpsRoute
+    }
     '/ops/requests/$id': {
       id: '/ops/requests/$id'
       path: '/$id'
@@ -350,6 +369,7 @@ const OpsRequestsRouteWithChildren = OpsRequestsRoute._addFileChildren(
 )
 
 interface OpsRouteChildren {
+  OpsAuditRoute: typeof OpsAuditRoute
   OpsAutomationsRoute: typeof OpsAutomationsRoute
   OpsExceptionsRoute: typeof OpsExceptionsRoute
   OpsProvidersRoute: typeof OpsProvidersRoute
@@ -358,6 +378,7 @@ interface OpsRouteChildren {
 }
 
 const OpsRouteChildren: OpsRouteChildren = {
+  OpsAuditRoute: OpsAuditRoute,
   OpsAutomationsRoute: OpsAutomationsRoute,
   OpsExceptionsRoute: OpsExceptionsRoute,
   OpsProvidersRoute: OpsProvidersRoute,
