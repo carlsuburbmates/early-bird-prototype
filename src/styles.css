@@ -61,6 +61,23 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@theme inline {
+  --color-console-bg: var(--console-bg);
+  --color-console-surface: var(--console-surface);
+  --color-console-foreground: var(--console-foreground);
+  --color-console-muted: var(--console-muted);
+  --color-console-muted-foreground: var(--console-muted-foreground);
+  --color-console-border: var(--console-border);
+  --color-console-primary: var(--console-primary);
+  --color-console-accent: var(--console-accent);
+  --color-status-neutral: var(--status-neutral);
+  --color-status-info: var(--status-info);
+  --color-status-progress: var(--status-progress);
+  --color-status-success: var(--status-success);
+  --color-status-warning: var(--status-warning);
+  --color-status-critical: var(--status-critical);
+}
+
 :root {
   --radius: 0.625rem;
   /* Friendly renter brand — warm neutrals + terracotta accent. */
