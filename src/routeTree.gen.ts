@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ProviderRouteImport } from './routes/provider'
+import { Route as OpsRouteImport } from './routes/ops'
 import { Route as IntakeRouteImport } from './routes/intake'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as ForProvidersRouteImport } from './routes/for-providers'
@@ -26,6 +27,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const ProviderRoute = ProviderRouteImport.update({
   id: '/provider',
   path: '/provider',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpsRoute = OpsRouteImport.update({
+  id: '/ops',
+  path: '/ops',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IntakeRoute = IntakeRouteImport.update({
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
   '/intake': typeof IntakeRouteWithChildren
+  '/ops': typeof OpsRoute
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
   '/intake': typeof IntakeRouteWithChildren
+  '/ops': typeof OpsRoute
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/for-providers': typeof ForProvidersRoute
   '/how-it-works': typeof HowItWorksRoute
   '/intake': typeof IntakeRouteWithChildren
+  '/ops': typeof OpsRoute
   '/provider': typeof ProviderRoute
   '/services': typeof ServicesRoute
   '/intake/submitted/$id': typeof IntakeSubmittedIdRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/for-providers'
     | '/how-it-works'
     | '/intake'
+    | '/ops'
     | '/provider'
     | '/services'
     | '/intake/submitted/$id'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/for-providers'
     | '/how-it-works'
     | '/intake'
+    | '/ops'
     | '/provider'
     | '/services'
     | '/intake/submitted/$id'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/for-providers'
     | '/how-it-works'
     | '/intake'
+    | '/ops'
     | '/provider'
     | '/services'
     | '/intake/submitted/$id'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   ForProvidersRoute: typeof ForProvidersRoute
   HowItWorksRoute: typeof HowItWorksRoute
   IntakeRoute: typeof IntakeRouteWithChildren
+  OpsRoute: typeof OpsRoute
   ProviderRoute: typeof ProviderRoute
   ServicesRoute: typeof ServicesRoute
 }
@@ -147,6 +160,13 @@ declare module '@tanstack/react-router' {
       path: '/provider'
       fullPath: '/provider'
       preLoaderRoute: typeof ProviderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ops': {
+      id: '/ops'
+      path: '/ops'
+      fullPath: '/ops'
+      preLoaderRoute: typeof OpsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/intake': {
@@ -211,9 +231,20 @@ const rootRouteChildren: RootRouteChildren = {
   ForProvidersRoute: ForProvidersRoute,
   HowItWorksRoute: HowItWorksRoute,
   IntakeRoute: IntakeRouteWithChildren,
+  OpsRoute: OpsRoute,
   ProviderRoute: ProviderRoute,
   ServicesRoute: ServicesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
