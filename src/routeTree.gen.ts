@@ -23,6 +23,7 @@ import { Route as RequestIdRouteImport } from './routes/request.$id'
 import { Route as OpsRequestsRouteImport } from './routes/ops.requests'
 import { Route as OpsProvidersRouteImport } from './routes/ops.providers'
 import { Route as OpsExceptionsRouteImport } from './routes/ops.exceptions'
+import { Route as OpsCustomersRouteImport } from './routes/ops.customers'
 import { Route as OpsBillingRouteImport } from './routes/ops.billing'
 import { Route as OpsAutomationsRouteImport } from './routes/ops.automations'
 import { Route as OpsAuditRouteImport } from './routes/ops.audit'
@@ -98,6 +99,11 @@ const OpsExceptionsRoute = OpsExceptionsRouteImport.update({
   path: '/exceptions',
   getParentRoute: () => OpsRoute,
 } as any)
+const OpsCustomersRoute = OpsCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => OpsRoute,
+} as any)
 const OpsBillingRoute = OpsBillingRouteImport.update({
   id: '/billing',
   path: '/billing',
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/ops/audit': typeof OpsAuditRoute
   '/ops/automations': typeof OpsAutomationsRoute
   '/ops/billing': typeof OpsBillingRoute
+  '/ops/customers': typeof OpsCustomersRoute
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/providers': typeof OpsProvidersRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/ops/audit': typeof OpsAuditRoute
   '/ops/automations': typeof OpsAutomationsRoute
   '/ops/billing': typeof OpsBillingRoute
+  '/ops/customers': typeof OpsCustomersRoute
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/providers': typeof OpsProvidersRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/ops/audit': typeof OpsAuditRoute
   '/ops/automations': typeof OpsAutomationsRoute
   '/ops/billing': typeof OpsBillingRoute
+  '/ops/customers': typeof OpsCustomersRoute
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/providers': typeof OpsProvidersRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/ops/audit'
     | '/ops/automations'
     | '/ops/billing'
+    | '/ops/customers'
     | '/ops/exceptions'
     | '/ops/providers'
     | '/ops/requests'
@@ -212,6 +222,7 @@ export interface FileRouteTypes {
     | '/ops/audit'
     | '/ops/automations'
     | '/ops/billing'
+    | '/ops/customers'
     | '/ops/exceptions'
     | '/ops/providers'
     | '/ops/requests'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/ops/audit'
     | '/ops/automations'
     | '/ops/billing'
+    | '/ops/customers'
     | '/ops/exceptions'
     | '/ops/providers'
     | '/ops/requests'
@@ -354,6 +366,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OpsExceptionsRouteImport
       parentRoute: typeof OpsRoute
     }
+    '/ops/customers': {
+      id: '/ops/customers'
+      path: '/customers'
+      fullPath: '/ops/customers'
+      preLoaderRoute: typeof OpsCustomersRouteImport
+      parentRoute: typeof OpsRoute
+    }
     '/ops/billing': {
       id: '/ops/billing'
       path: '/billing'
@@ -401,6 +420,7 @@ interface OpsRouteChildren {
   OpsAuditRoute: typeof OpsAuditRoute
   OpsAutomationsRoute: typeof OpsAutomationsRoute
   OpsBillingRoute: typeof OpsBillingRoute
+  OpsCustomersRoute: typeof OpsCustomersRoute
   OpsExceptionsRoute: typeof OpsExceptionsRoute
   OpsProvidersRoute: typeof OpsProvidersRoute
   OpsRequestsRoute: typeof OpsRequestsRouteWithChildren
@@ -411,6 +431,7 @@ const OpsRouteChildren: OpsRouteChildren = {
   OpsAuditRoute: OpsAuditRoute,
   OpsAutomationsRoute: OpsAutomationsRoute,
   OpsBillingRoute: OpsBillingRoute,
+  OpsCustomersRoute: OpsCustomersRoute,
   OpsExceptionsRoute: OpsExceptionsRoute,
   OpsProvidersRoute: OpsProvidersRoute,
   OpsRequestsRoute: OpsRequestsRouteWithChildren,
