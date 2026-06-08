@@ -10,7 +10,7 @@ Canonical dependency: docs/PROJECT_TRUTH.md
 
 This PRD merges the full product, workflow, operating model, prototype scope, and migration requirements for LeaseMate.
 
-LeaseMate is a rental move-out coordination platform for renters who need to organise multiple services when leaving a rental property.
+LeaseMate is a rental move-out service marketplace and coordination platform for renters who need to organise multiple services when leaving a rental property.
 
 This document should guide:
 
@@ -29,14 +29,14 @@ Do not reinterpret LeaseMate as a generic marketplace, directory, quote-comparis
 
 1. Executive Summary
 
-LeaseMate helps renters plan and coordinate the services needed when moving out of a rental property.
+LeaseMate helps renters browse, select, and coordinate productised move-out service products when moving out of a rental property.
 
 The platform helps renters:
 
 * enter move-out requirements once
 * understand likely cost ranges
-* choose preferred providers
-* build a move-out service package
+* browse provider-listed service products by category
+* build a Move-Out Cart with preferred and backup options
 * submit one coordinated request
 * avoid contacting multiple businesses individually
 
@@ -55,7 +55,7 @@ The platform’s core value is not cheap quotes.
 
 The core value is:
 
-Helping renters build and coordinate a complete move-out service package with less chasing, less confusion, and better visibility over expected costs.
+Helping renters build and coordinate a Move-Out Cart from provider-listed service products with less chasing, less confusion, and better visibility over expected costs.
 
 The operating model is:
 
@@ -71,7 +71,7 @@ The solo operator supervises everything through an Operations Center with comple
 
 Primary Category
 
-Rental Move-Out Coordination Platform
+Rental Move-Out Service Marketplace and Coordination Platform
 
 Secondary Category
 
@@ -116,7 +116,7 @@ A renter should be able to:
 2. understand which services may be needed
 3. see suitable providers
 4. compare estimated price ranges
-5. build a move-out package
+5. build a Move-Out Cart from provider-listed service products
 6. submit once
 7. let the platform coordinate introductions
 
@@ -128,7 +128,7 @@ The operator should be able to supervise many active workflows without manually 
 
 4. Core Business Definition
 
-LeaseMate helps renters organise everything they need for moving out of a rental property by building a move-out service package and coordinating exclusive introductions with suitable providers through a fully visible, automation-first operations system.
+LeaseMate helps renters organise everything they need for moving out of a rental property by building a Move-Out Cart from provider-listed service products and coordinating payment-gated introductions with suitable providers through a fully visible, automation-first operations system.
 
 ⸻
 
@@ -140,7 +140,8 @@ LeaseMate must let renters:
 
 * understand what services they need
 * submit move-out details once
-* choose recommended providers or manually build a package
+* browse and filter provider-listed service products
+* build a Move-Out Cart with preferred and backup options
 * view estimated cost ranges
 * submit one coordinated request
 * track request progress
@@ -220,13 +221,13 @@ The platform then:
 
 * understands the move-out requirement
 * shows relevant service categories
-* recommends suitable providers
+* shows provider-listed service products by category
 * displays estimated price ranges
-* allows package creation
-* coordinates provider introductions
+* allows Move-Out Cart creation with preferred and backup options
+* coordinates payment-gated provider introductions
 * tracks workflow progress
 
-The customer does not need to call every supplier before submitting their preferred package.
+The customer does not need to call every supplier before submitting their Move-Out Cart.
 
 The platform handles the introduction workflow behind the scenes.
 
@@ -266,7 +267,7 @@ The customer wants:
 * fewer phone calls
 * a simple process
 * providers that match their actual needs
-* a coordinated move-out plan
+* a coordinated Move-Out Cart
 
 ⸻
 
@@ -299,7 +300,7 @@ Common frustrations include:
 
 Provider Solution
 
-LeaseMate gives providers exclusive, pre-qualified opportunities where the customer has already selected or accepted them as a preferred provider.
+LeaseMate gives providers exclusive, pre-qualified opportunities where the customer has selected their service products as preferred or backup options in a Move-Out Cart.
 
 Providers only pay when they choose to accept the opportunity.
 
@@ -317,10 +318,10 @@ They pay to unlock an exclusive customer introduction.
 
 For Renters
 
-* plan move-out services in one place
+* browse productised move-out services in one place
 * enter details once
 * understand expected price ranges
-* choose preferred providers
+* choose preferred and backup service-product options
 * avoid quote-chasing
 * reduce coordination stress
 * track request status
@@ -399,9 +400,10 @@ Launch service categories:
 
 Each category must support:
 
+* provider-listed service products
 * provider capability matching
 * estimated price range display
-* provider profile display
+* provider profile and service product display
 * provider invitation
 * accept/decline workflow
 * introduction fee
@@ -409,11 +411,45 @@ Each category must support:
 
 Customers may select one or multiple services.
 
-The system must support multi-service move-out packages from day one.
+The system must support multi-service Move-Out Carts from day one.
+
+12.1 Provider Service Products
+
+Provider-listed service products are the core marketplace unit.
+
+Required service product fields:
+
+* product ID
+* provider ID
+* service category
+* product title
+* description
+* service area/catchment
+* property type eligibility
+* bedroom/bathroom criteria where relevant
+* pickup/destination catchment where relevant
+* access assumptions
+* included services
+* excluded services
+* add-ons
+* estimated min price
+* estimated max price
+* availability/capacity notes
+* active/paused status
 
 ⸻
 
 13. Customer Journey
+
+Canonical journey:
+
+1. Enter basic move context.
+2. Browse/filter productised service listings.
+3. Add service products to Move-Out Cart.
+4. Select preferred and backup option per service where available.
+5. Review item ranges and total estimated cart range.
+6. Submit cart.
+7. LeaseMate coordinates provider acceptance and payment-gated introductions.
 
 Step 1 — Landing / Start
 
@@ -472,82 +508,47 @@ Optional fields:
 
 ⸻
 
-Step 3 — Service Selection
+Step 3 — Browse and Filter Service Products
 
-Customer chooses required services.
+Customer browses and filters productised service listings by move context and service category.
 
-The UI should make it clear that customers can build a multi-service package.
-
-Service cards should use plain-language descriptions.
+Service cards should use plain-language descriptions and show provider, service scope, and estimated price range.
 
 ⸻
 
-Step 4 — Package Mode Selection
+Step 4 — Build Move-Out Cart
 
-The customer has two paths.
+Customer adds provider-listed service products to a Move-Out Cart.
 
-Mode A — Recommended Package
-
-The platform recommends providers for each selected service.
-
-Customer sees:
-
-* provider name
-* service category
-* estimated price range
-* coverage area
-* capability match
-* short description
-* why this provider fits
-* option to accept recommended package
-* option to swap provider
-
-This mode is for customers who want simplicity.
-
-Mode B — Build My Own Package
-
-Customer browses provider options per service category.
-
-Customer can compare providers based on:
-
-* service area
-* estimated pricing range
-* property types serviced
-* job size range
-* availability indicator
-* capability tags
-* business summary
-* optional trust signals
-
-The customer adds preferred providers to their move-out package.
-
-This mode is for customers who want control.
+Customer can select both a preferred option and backup option per service category where available.
 
 ⸻
 
-Step 5 — Package Review
+Step 5 — Move-Out Cart Review
 
-Customer sees a package summary.
+Customer sees a Move-Out Cart summary.
 
 Example:
 
-* Removalist: Provider A, estimated $700–$900
-* End-of-lease cleaner: Provider B, estimated $350–$500
-* Carpet cleaner: Provider C, estimated $120–$220
-* Rubbish removal: Provider D, estimated $150–$300
+* Removalist product: Provider A, estimated $700–$900
+* End-of-lease cleaner product: Provider B, estimated $350–$500
+* Carpet cleaner product: Provider C, estimated $120–$220
+* Rubbish removal product: Provider D, estimated $150–$300
 
 Estimated total:
 
 $1,320–$1,920
 
-The total must be shown as an estimate range, not a guarantee.
+The total must be shown as an estimated range, not a guarantee.
 
 Customer confirms:
 
 * details are accurate
 * they understand providers invoice directly
-* they understand prices are estimated
-* they consent to the platform coordinating introductions
+* they understand prices are estimated and non-final
+* they understand cart submission is a coordination request, not checkout
+* they understand the customer does not pay LeaseMate at submission
+* they consent to the platform coordinating payment-gated provider introductions
 
 ⸻
 
@@ -566,7 +567,7 @@ Customer sees:
 
 Suggested wording:
 
-We’ve received your move-out package. We’ll now begin coordinating with your selected providers. You’ll be updated when a provider accepts or if we need you to choose another option.
+We’ve received your Move-Out Cart request. We’ll now coordinate provider invitations for your selected products. You’ll be updated when a provider accepts or if we need to move to your backup option.
 
 ⸻
 
@@ -587,8 +588,8 @@ Customer-facing status page should show:
 
 * request ID
 * current status
-* selected services
-* estimated package range
+* selected service products
+* estimated cart range
 * simplified timeline
 * next expected step
 * status explanation
@@ -598,6 +599,15 @@ Customer should not see internal billing details.
 Customer should not see provider payment workflow.
 
 Customer should not see operator controls unless demo mode is enabled.
+
+Optional Future Convenience Layer (Not Core Product Model)
+
+Recommended or suggested products may be added later only as:
+
+* sorting
+* filtering
+* suggested products
+* pre-filled cart
 
 ⸻
 
@@ -825,25 +835,13 @@ Avoid wording such as:
 
 Provider Pricing Inputs
 
-Providers should define estimated ranges for common job types.
+Service product estimated ranges are provider-defined and filtered/matched against renter move context. The exact production pricing algorithm remains a future decision.
 
-Example for end-of-lease cleaning:
+Example service products:
 
-* 1-bedroom apartment: $250–$350
-* 2-bedroom apartment: $350–$500
-* 3-bedroom house: $500–$750
-
-Example for removalists:
-
-* 1-bedroom apartment: $350–$600
-* 2-bedroom apartment: $600–$900
-* 3-bedroom house: $900–$1,500
-
-Example for rubbish removal:
-
-* small load: $100–$200
-* medium load: $200–$400
-* large load: $400+
+* Removalist: “2-bedroom apartment move — Northcote to inner Melbourne”, estimated range: $650–$1,100
+* End-of-lease cleaner: “2-bedroom apartment end-of-lease clean — inner north”, estimated range: $350–$550
+* Rubbish removal: “Small move-out rubbish removal — inner north”, estimated range: $120–$250
 
 Display Rule
 
@@ -1175,7 +1173,7 @@ Lifecycle Definitions
 
 Submitted
 
-Customer has submitted the move-out package.
+Customer has submitted the Move-Out Cart coordination request.
 
 Matching / Matched
 
@@ -1183,7 +1181,7 @@ System has identified suitable provider options.
 
 Provider Invited
 
-The selected or recommended provider has been invited.
+The selected preferred or backup provider product has been invited.
 
 Awaiting Provider Response
 
@@ -1322,7 +1320,7 @@ Escalation Reasons
 * provider declined
 * provider accepted but did not pay
 * no suitable provider remains
-* customer package cannot be fulfilled
+* customer cart cannot be fulfilled
 * automation failed
 * data is incomplete
 * manual decision required
@@ -1374,7 +1372,7 @@ If selected providers cannot be secured, customer should receive an update after
 
 Suggested initial target:
 
-* customer updated within 48 hours if the original package cannot be fulfilled
+* customer updated within 48 hours if the original cart cannot be fulfilled
 
 ⸻
 
@@ -1542,8 +1540,8 @@ Every important event should be recorded.
 Audit Event Examples
 
 * customer created request
-* customer selected provider
-* system recommended provider
+* customer selected service product
+* provider product invited
 * provider invitation sent
 * provider accepted
 * provider declined
@@ -1679,7 +1677,7 @@ Fields:
 
 Request / MoveRequest
 
-Represents move-out package request.
+Represents a submitted Move-Out Cart coordination request.
 
 Fields:
 
@@ -1688,21 +1686,25 @@ Fields:
 * property details
 * move date
 * required services
+* selected service products
 * current state
 * priority
 * SLA timer
 * created date
 * updated date
 
-Service Requirement
+Service Requirement / Cart Item
 
-Represents one requested service within a request.
+Represents one requested service product item within a request.
 
 Fields:
 
 * service requirement ID
 * request ID
 * service category
+* selected product ID
+* provider ID
+* preferred/backup position
 * details
 * estimated range
 * status
@@ -1722,19 +1724,29 @@ Fields:
 * status
 * created date
 
-Provider Selection
+Provider Service Product
 
-Represents customer’s chosen provider for a service.
+Represents a provider-listed productised move-out service.
 
 Fields:
 
-* selection ID
-* request ID
-* service requirement ID
+* product ID
 * provider ID
-* rank
-* selected by customer or system
-* status
+* service category
+* product title
+* description
+* service area/catchment
+* property type eligibility
+* bedroom/bathroom criteria where relevant
+* pickup/destination catchment where relevant
+* access assumptions
+* included services
+* excluded services
+* add-ons
+* estimated min price
+* estimated max price
+* availability/capacity notes
+* active/paused status
 
 Provider Invitation
 
@@ -2170,10 +2182,10 @@ Prototype Must Demonstrate
 Customer:
 
 * intake form
-* service selection
-* recommended package
-* build-my-own package
-* package review
+* service product browsing/filtering
+* add-to-cart flow for productised services
+* preferred/backup option selection
+* Move-Out Cart review
 * submission confirmation
 * status screen
 
@@ -2285,8 +2297,10 @@ The prototype is acceptable when:
 * customer can start intake
 * customer can enter move-out details
 * customer can select services
-* customer can view estimated package
-* customer can submit package
+* customer can add productised services to Move-Out Cart
+* customer can select preferred/backup provider products
+* cart shows item ranges and total estimated range
+* customer can submit cart coordination request
 * customer can view request status
 * customer does not see internal billing workflow
 * customer does not see operator controls unless demo mode is active
@@ -2314,6 +2328,8 @@ The prototype is acceptable when:
 * operator can see automations
 * operator can see audit history
 * operator can see system health
+* submitted cart becomes operational workflow
+* ops can see cart item routing per service
 * operator can trigger demo-only actions
 * autonomous and manual workflows are both visible
 
@@ -2413,20 +2429,22 @@ The following are locked for v1 planning:
 2. Product is a rental move-out coordination platform.
 3. Product coordinates introductions.
 4. Product does not provide services directly.
-5. Customer can use recommended package or build their own.
-6. Provider profiles include capabilities and estimated price ranges.
-7. Customer sees estimated price ranges, not final quotes.
-8. Provider accepts or declines opportunities.
-9. Customer details remain hidden until provider pays.
-10. Provider invoices customer directly after details are released.
-11. Revenue is introduction-fee based.
-12. Ops surface is called Operations Center.
-13. Operations model is autonomous system plus full visibility plus selective intervention.
-14. All workflows must be visible, including automated workflows.
-15. Nothing disappears until completed or closed.
-16. Audit trail is append-only.
-17. Prototype should be frontend-only with mock data.
-18. No backend integrations should be added until explicitly decided later.
+5. Provider-listed service products are the core marketplace unit.
+6. Move-Out Cart is the core customer-facing differentiator.
+7. Recommended packages are optional future convenience only, not core.
+8. Provider profiles include capabilities and estimated price ranges.
+9. Customer sees estimated price ranges, not final quotes.
+10. Provider accepts or declines opportunities.
+11. Customer details remain hidden until provider pays.
+12. Provider invoices customer directly after details are released.
+13. Revenue is introduction-fee based.
+14. Ops surface is called Operations Center.
+15. Operations model is autonomous system plus full visibility plus selective intervention.
+16. All workflows must be visible, including automated workflows.
+17. Nothing disappears until completed or closed.
+18. Audit trail is append-only.
+19. Prototype should be frontend-only with mock data.
+20. No backend integrations should be added until explicitly decided later.
 
 ⸻
 
@@ -2502,9 +2520,9 @@ Prototype logic must not be tied to Lovable-only systems or hidden integrations.
 Customer Metrics
 
 * intake completion rate
-* package submission rate
-* recommended package acceptance rate
-* build-my-own usage rate
+* Move-Out Cart submission rate
+* preferred-option selection rate
+* backup-option selection rate
 * customer update time
 * customer drop-off by screen
 * request status page visits
@@ -2611,7 +2629,7 @@ Agents may:
 
 50. Final PRD Summary
 
-LeaseMate must demonstrate a complete rental move-out coordination workflow where renters build a service package, providers accept and pay for exclusive introductions, and the operator supervises all autonomous and manual workflow states through a full-visibility Operations Center.
+LeaseMate must demonstrate a complete rental move-out service marketplace workflow where renters build a Move-Out Cart from provider-listed service products, providers accept and pay for exclusive introductions, and the operator supervises all autonomous and manual workflow states through a full-visibility Operations Center.
 
 This PRD is complete for the current frontend prototype and local-readiness phase.
 

@@ -44,7 +44,7 @@ Temporary task notes, prompts, AI-builder outputs, and implementation logs are n
 
 # 2. Product Identity
 
-LeaseMate is a **rental move-out coordination platform**.
+LeaseMate is a **rental move-out service marketplace and coordination platform**.
 
 It helps renters organise the services they need when leaving a rental property.
 
@@ -56,7 +56,7 @@ LeaseMate does not provide the services directly.
 
 # 3. One-Sentence Definition
 
-LeaseMate helps renters build and manage a complete move-out service package while coordinating exclusive provider introductions through a fully visible, automation-first Operations Center.
+LeaseMate is a rental move-out service marketplace where renters build a Move-Out Cart from provider-listed service products with estimated price ranges, then LeaseMate coordinates payment-gated provider introductions.
 
 ---
 
@@ -138,7 +138,7 @@ The customer wants:
 * clearer expected costs
 * a simple planning process
 * relevant provider options
-* a coordinated move-out package
+* a coordinated Move-Out Cart
 * visibility over request progress
 
 ---
@@ -240,11 +240,12 @@ The platform then:
 
 * understands the move-out requirement
 * shows relevant service categories
-* recommends suitable providers
-* lets the customer build their own package if preferred
+* displays provider-listed productised move-out service products
+* lets the customer build a Move-Out Cart
+* supports preferred and backup options per service need
 * displays estimated price ranges
 * submits one coordinated request
-* coordinates provider introductions
+* coordinates payment-gated provider introductions
 * tracks workflow progress
 
 ---
@@ -263,9 +264,10 @@ LeaseMate should support these launch service categories:
 
 Each service category should support:
 
-* provider capability matching
+* provider-created service product listings
+* service product criteria matching
 * estimated price range display
-* provider profile display
+* provider and service product display
 * provider invitation
 * accept/decline workflow
 * introduction fee
@@ -273,7 +275,7 @@ Each service category should support:
 
 Customers may select one or multiple services.
 
-LeaseMate must support multi-service move-out packages.
+LeaseMate must support multi-service Move-Out Carts.
 
 ---
 
@@ -282,15 +284,16 @@ LeaseMate must support multi-service move-out packages.
 The intended customer workflow is:
 
 1. Customer enters move-out details.
-2. Customer selects required services.
-3. Customer chooses recommended providers or builds their own package.
-4. Customer reviews estimated price ranges.
-5. Customer submits the package.
-6. Platform coordinates provider introductions.
-7. Customer tracks request status.
-8. Customer is introduced after provider acceptance and payment.
+2. Customer browses and selects productised move-out service products.
+3. Customer adds selected service products to a Move-Out Cart.
+4. Customer chooses preferred and backup options per service need.
+5. Customer reviews item estimated ranges and total estimated cart range.
+6. Customer submits one coordinated request.
+7. Platform coordinates provider acceptance and payment-gated provider introductions.
+8. Customer tracks request status.
+9. Customer is introduced after provider acceptance and payment.
 
-The customer should not need to manually call every supplier before submitting a package.
+The customer should not need to manually call every supplier before submitting a Move-Out Cart.
 
 ---
 
@@ -298,13 +301,14 @@ The customer should not need to manually call every supplier before submitting a
 
 The intended provider workflow is:
 
-1. Provider receives an opportunity.
-2. Provider reviews job summary without customer contact details.
-3. Provider accepts or declines.
-4. If accepted, provider pays an introduction fee.
-5. Customer details are released only after payment.
-6. Provider contacts the customer directly.
-7. Provider invoices the customer directly.
+1. Provider lists service products with criteria and estimated price ranges.
+2. Provider receives opportunities when renters add those products to Move-Out Carts.
+3. Provider reviews job summary without customer contact details.
+4. Provider accepts or declines.
+5. If accepted, provider pays an introduction fee.
+6. Customer details are released only after payment.
+7. Provider contacts the customer directly.
+8. Provider invoices the customer directly.
 
 The provider should not receive customer contact details before payment.
 
@@ -377,7 +381,7 @@ LeaseMate does not invoice the customer for the provider’s service.
 
 LeaseMate displays estimated price ranges.
 
-LeaseMate does not display guaranteed final quotes unless a provider explicitly defines a fixed-price service.
+LeaseMate does not display guaranteed final quotes.
 
 Final pricing is determined by the provider.
 
@@ -608,7 +612,7 @@ Escalation reasons include:
 * all providers declined
 * no provider matched
 * provider accepted but did not pay
-* customer package cannot be fulfilled
+* customer cart cannot be fulfilled
 * automation failed
 * data is incomplete
 * manual decision is required
@@ -710,20 +714,21 @@ The following decisions are locked:
 2. LeaseMate is a rental move-out coordination platform.
 3. LeaseMate coordinates introductions.
 4. LeaseMate does not provide services directly.
-5. Customers can use recommended package or build their own package.
-6. Provider profiles include capabilities and estimated price ranges.
-7. Customers see estimated price ranges, not final quotes.
-8. Providers accept or decline opportunities.
-9. Customer details remain hidden until provider acceptance and introduction-fee payment.
-10. Providers invoice customers directly after customer details are released.
-11. Revenue is introduction-fee based.
-12. The Ops surface is called Operations Center.
-13. Operations model is autonomous system plus full visibility plus selective intervention.
-14. Automated workflows must remain visible.
-15. Nothing disappears until completed, cancelled, or closed.
-16. Audit history is append-only.
-17. Builder/tool-specific history is not product truth.
-18. Documentation authority starts with this SSOT.
+5. Provider-listed service products are the core marketplace unit.
+6. The Move-Out Cart is the core customer-facing differentiator.
+7. Recommended packages are not the core product experience.
+8. Customers see estimated price ranges, not final quotes.
+9. Providers accept or decline opportunities.
+10. Customer details remain hidden until provider acceptance and introduction-fee payment.
+11. Providers invoice customers directly after customer details are released.
+12. Revenue is introduction-fee based.
+13. The Ops surface is called Operations Center.
+14. Operations model is autonomous system plus full visibility plus selective intervention.
+15. Automated workflows must remain visible.
+16. Nothing disappears until completed, cancelled, or closed.
+17. Audit history is append-only.
+18. Builder/tool-specific history is not product truth.
+19. Documentation authority starts with this SSOT.
 
 ---
 
@@ -799,9 +804,9 @@ Prototype logic must not become tied to builder-specific systems or hidden integ
 ## Customer Metrics
 
 * intake completion rate
-* package submission rate
-* recommended package acceptance rate
-* build-my-own usage rate
+* Move-Out Cart submission rate
+* product-level preferred-option selection rate
+* backup-option selection rate
 * customer update time
 * customer drop-off by screen
 * request status page visits
@@ -842,6 +847,6 @@ Prototype logic must not become tied to builder-specific systems or hidden integ
 
 # 33. Final SSOT Statement
 
-LeaseMate is a renter-focused move-out coordination platform where customers create a service package, providers accept paid exclusive introductions, and an operator supervises the autonomous workflow through a full-visibility Operations Center.
+LeaseMate is a renter-focused move-out service marketplace and coordination platform where customers submit a Move-Out Cart of provider-listed service products, providers accept paid exclusive introductions, and an operator supervises the autonomous workflow through a full-visibility Operations Center.
 
 This document is the highest authority for the project’s intended identity, boundaries, and locked decisions.
