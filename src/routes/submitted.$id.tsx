@@ -3,6 +3,7 @@ import { MarketingShell } from "@/components/shared/MarketingShell";
 import { useStore, selectRequest } from "@/mock/store";
 import { StateBadge } from "@/components/shared/StateBadge";
 import { CheckCircle2 } from "lucide-react";
+import { isDemoMode } from "@/mock/demo";
 
 export const Route = createFileRoute("/submitted/$id")({
   head: () => ({ meta: [{ title: "Request submitted — LeaseMate" }] }),
@@ -33,14 +34,22 @@ function Submitted() {
         )}
 
         <div className="mt-8 flex justify-center gap-3">
-          <Link to="/ops/requests/$id" params={{ id }}
+          <Link to="/request/$id" params={{ id }}
             className="rounded-full border border-border bg-card px-5 py-2 text-sm hover:bg-accent">
-            Open in operator view
+            View request status
           </Link>
           <Link to="/" className="rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground hover:bg-primary/90">
             Back to home
           </Link>
         </div>
+
+        {isDemoMode() && (
+          <div className="mt-6 text-xs text-muted-foreground">
+            <Link to="/ops/requests/$id" params={{ id }} className="underline">
+              Demo: open in operator view
+            </Link>
+          </div>
+        )}
       </section>
     </MarketingShell>
   );
