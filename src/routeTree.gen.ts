@@ -22,6 +22,7 @@ import { Route as SubmittedIdRouteImport } from './routes/submitted.$id'
 import { Route as RequestIdRouteImport } from './routes/request.$id'
 import { Route as OpsRequestsRouteImport } from './routes/ops.requests'
 import { Route as OpsProvidersRouteImport } from './routes/ops.providers'
+import { Route as OpsHealthRouteImport } from './routes/ops.health'
 import { Route as OpsExceptionsRouteImport } from './routes/ops.exceptions'
 import { Route as OpsCustomersRouteImport } from './routes/ops.customers'
 import { Route as OpsBillingRouteImport } from './routes/ops.billing'
@@ -94,6 +95,11 @@ const OpsProvidersRoute = OpsProvidersRouteImport.update({
   path: '/providers',
   getParentRoute: () => OpsRoute,
 } as any)
+const OpsHealthRoute = OpsHealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => OpsRoute,
+} as any)
 const OpsExceptionsRoute = OpsExceptionsRouteImport.update({
   id: '/exceptions',
   path: '/exceptions',
@@ -139,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/ops/billing': typeof OpsBillingRoute
   '/ops/customers': typeof OpsCustomersRoute
   '/ops/exceptions': typeof OpsExceptionsRoute
+  '/ops/health': typeof OpsHealthRoute
   '/ops/providers': typeof OpsProvidersRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
   '/request/$id': typeof RequestIdRoute
@@ -159,6 +166,7 @@ export interface FileRoutesByTo {
   '/ops/billing': typeof OpsBillingRoute
   '/ops/customers': typeof OpsCustomersRoute
   '/ops/exceptions': typeof OpsExceptionsRoute
+  '/ops/health': typeof OpsHealthRoute
   '/ops/providers': typeof OpsProvidersRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
   '/request/$id': typeof RequestIdRoute
@@ -181,6 +189,7 @@ export interface FileRoutesById {
   '/ops/billing': typeof OpsBillingRoute
   '/ops/customers': typeof OpsCustomersRoute
   '/ops/exceptions': typeof OpsExceptionsRoute
+  '/ops/health': typeof OpsHealthRoute
   '/ops/providers': typeof OpsProvidersRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
   '/request/$id': typeof RequestIdRoute
@@ -204,6 +213,7 @@ export interface FileRouteTypes {
     | '/ops/billing'
     | '/ops/customers'
     | '/ops/exceptions'
+    | '/ops/health'
     | '/ops/providers'
     | '/ops/requests'
     | '/request/$id'
@@ -224,6 +234,7 @@ export interface FileRouteTypes {
     | '/ops/billing'
     | '/ops/customers'
     | '/ops/exceptions'
+    | '/ops/health'
     | '/ops/providers'
     | '/ops/requests'
     | '/request/$id'
@@ -245,6 +256,7 @@ export interface FileRouteTypes {
     | '/ops/billing'
     | '/ops/customers'
     | '/ops/exceptions'
+    | '/ops/health'
     | '/ops/providers'
     | '/ops/requests'
     | '/request/$id'
@@ -359,6 +371,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OpsProvidersRouteImport
       parentRoute: typeof OpsRoute
     }
+    '/ops/health': {
+      id: '/ops/health'
+      path: '/health'
+      fullPath: '/ops/health'
+      preLoaderRoute: typeof OpsHealthRouteImport
+      parentRoute: typeof OpsRoute
+    }
     '/ops/exceptions': {
       id: '/ops/exceptions'
       path: '/exceptions'
@@ -422,6 +441,7 @@ interface OpsRouteChildren {
   OpsBillingRoute: typeof OpsBillingRoute
   OpsCustomersRoute: typeof OpsCustomersRoute
   OpsExceptionsRoute: typeof OpsExceptionsRoute
+  OpsHealthRoute: typeof OpsHealthRoute
   OpsProvidersRoute: typeof OpsProvidersRoute
   OpsRequestsRoute: typeof OpsRequestsRouteWithChildren
   OpsIndexRoute: typeof OpsIndexRoute
@@ -433,6 +453,7 @@ const OpsRouteChildren: OpsRouteChildren = {
   OpsBillingRoute: OpsBillingRoute,
   OpsCustomersRoute: OpsCustomersRoute,
   OpsExceptionsRoute: OpsExceptionsRoute,
+  OpsHealthRoute: OpsHealthRoute,
   OpsProvidersRoute: OpsProvidersRoute,
   OpsRequestsRoute: OpsRequestsRouteWithChildren,
   OpsIndexRoute: OpsIndexRoute,
