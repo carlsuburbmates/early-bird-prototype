@@ -19,6 +19,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OpsIndexRouteImport } from './routes/ops.index'
 import { Route as SubmittedIdRouteImport } from './routes/submitted.$id'
+import { Route as RequestIdRouteImport } from './routes/request.$id'
 import { Route as OpsRequestsRouteImport } from './routes/ops.requests'
 import { Route as OpsProvidersRouteImport } from './routes/ops.providers'
 import { Route as OpsExceptionsRouteImport } from './routes/ops.exceptions'
@@ -76,6 +77,11 @@ const SubmittedIdRoute = SubmittedIdRouteImport.update({
   path: '/submitted/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RequestIdRoute = RequestIdRouteImport.update({
+  id: '/request/$id',
+  path: '/request/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OpsRequestsRoute = OpsRequestsRouteImport.update({
   id: '/requests',
   path: '/requests',
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/providers': typeof OpsProvidersRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
+  '/request/$id': typeof RequestIdRoute
   '/submitted/$id': typeof SubmittedIdRoute
   '/ops/': typeof OpsIndexRoute
   '/ops/requests/$id': typeof OpsRequestsIdRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/providers': typeof OpsProvidersRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
+  '/request/$id': typeof RequestIdRoute
   '/submitted/$id': typeof SubmittedIdRoute
   '/ops': typeof OpsIndexRoute
   '/ops/requests/$id': typeof OpsRequestsIdRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/providers': typeof OpsProvidersRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
+  '/request/$id': typeof RequestIdRoute
   '/submitted/$id': typeof SubmittedIdRoute
   '/ops/': typeof OpsIndexRoute
   '/ops/requests/$id': typeof OpsRequestsIdRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/ops/exceptions'
     | '/ops/providers'
     | '/ops/requests'
+    | '/request/$id'
     | '/submitted/$id'
     | '/ops/'
     | '/ops/requests/$id'
@@ -194,6 +204,7 @@ export interface FileRouteTypes {
     | '/ops/exceptions'
     | '/ops/providers'
     | '/ops/requests'
+    | '/request/$id'
     | '/submitted/$id'
     | '/ops'
     | '/ops/requests/$id'
@@ -212,6 +223,7 @@ export interface FileRouteTypes {
     | '/ops/exceptions'
     | '/ops/providers'
     | '/ops/requests'
+    | '/request/$id'
     | '/submitted/$id'
     | '/ops/'
     | '/ops/requests/$id'
@@ -226,6 +238,7 @@ export interface RootRouteChildren {
   OpsRoute: typeof OpsRouteWithChildren
   ProviderRoute: typeof ProviderRoute
   ServicesRoute: typeof ServicesRoute
+  RequestIdRoute: typeof RequestIdRoute
   SubmittedIdRoute: typeof SubmittedIdRoute
 }
 
@@ -299,6 +312,13 @@ declare module '@tanstack/react-router' {
       path: '/submitted/$id'
       fullPath: '/submitted/$id'
       preLoaderRoute: typeof SubmittedIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/request/$id': {
+      id: '/request/$id'
+      path: '/request/$id'
+      fullPath: '/request/$id'
+      preLoaderRoute: typeof RequestIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ops/requests': {
@@ -387,8 +407,19 @@ const rootRouteChildren: RootRouteChildren = {
   OpsRoute: OpsRouteWithChildren,
   ProviderRoute: ProviderRoute,
   ServicesRoute: ServicesRoute,
+  RequestIdRoute: RequestIdRoute,
   SubmittedIdRoute: SubmittedIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
