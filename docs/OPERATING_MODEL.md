@@ -9,7 +9,7 @@ Canonical dependencies:
 * docs/PROJECT_TRUTH.md
 * docs/PRD.md
 
-This document defines how LeaseMate should operate as a solo-founder, automation-first rental move-out coordination platform.
+This document defines how LeaseMate should operate as a solo-founder, automation-first rental move-out service marketplace and coordination platform.
 
 It focuses specifically on:
 
@@ -111,11 +111,11 @@ The renter submitting a move-out request.
 
 Request / MoveRequest
 
-The overall move-out package request.
+The overall submitted Move-Out Cart coordination request.
 
-Service Requirement
+Service Requirement / Cart Item
 
-One required service within a move-out package.
+One required service product item within a submitted Move-Out Cart.
 
 Example:
 
@@ -127,9 +127,9 @@ Provider
 
 The independent business that may accept an opportunity.
 
-Provider Selection
+Provider Product Selection
 
-The chosen or recommended provider for a service requirement.
+The selected preferred or backup provider-listed service product for a service requirement.
 
 Provider Invitation
 
@@ -154,6 +154,24 @@ A scheduled or executed automated workflow step.
 Audit Event
 
 An append-only record of important system, provider, customer, or operator activity.
+
+⸻
+
+4.1 Cart-Item Operational Model
+
+After customer submission, each Move-Out Cart item becomes an operational service requirement.
+
+Each cart item must track:
+
+* service category
+* selected product
+* provider
+* preferred/backup position
+* invitation state
+* billing state
+* customer release state
+* exception state
+* next action
 
 ⸻
 
@@ -221,8 +239,11 @@ Required columns:
 
 * invitation ID
 * request ID
+* cart item ID
+* service product
 * provider
 * service category
+* preferred/backup position
 * invitation status
 * sent time
 * response due
@@ -260,6 +281,8 @@ Required columns:
 
 * fee ID
 * request ID
+* cart item ID
+* service product
 * provider
 * service category
 * fee amount
@@ -471,6 +494,12 @@ Every request detail page must show:
 * exceptions
 * audit timeline
 
+Package/Cart Routing Matrix
+
+Request detail must include a routing matrix with:
+
+Service | Product | Provider | Preferred/Backup | Invitation State | Billing State | Release State | Next Action
+
 ⸻
 
 7. Provider Invitation Lifecycle
@@ -604,7 +633,7 @@ Escalation reasons:
 * provider accepted but did not pay
 * all providers declined
 * no provider matched
-* customer package cannot be fulfilled
+* customer cart cannot be fulfilled
 * automation failed
 * data is incomplete
 * manual decision required
@@ -830,8 +859,8 @@ Every important event must be recorded.
 Examples:
 
 * customer request created
-* customer selected provider
-* system recommended provider
+* customer selected service product
+* provider product invited
 * provider invitation sent
 * provider accepted
 * provider declined
