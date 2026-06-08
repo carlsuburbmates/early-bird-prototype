@@ -107,6 +107,43 @@ const PROVIDERS: Provider[] = [
   }, 4.6),
 ];
 
+// Additional providers to reach 20+ and to cover scenarios where every
+// in-suburb option is exhausted (decline / expire / all-declined paths).
+PROVIDERS.push(
+  provider("prov_inner_movers", "Inner City Removals", ["removalist"], ["Carlton", "Fitzroy", "Collingwood", "Richmond"], {
+    removalist: P(520, 1350),
+  }, 4.6),
+  provider("prov_west_movers", "Westgate Movers", ["removalist"], ["Footscray", "Brunswick"], {
+    removalist: P(420, 1150),
+  }, 4.2),
+  provider("prov_two_guys", "Two Guys & a Truck", ["removalist", "rubbish_removal"], ["Hawthorn", "South Yarra", "St Kilda", "Richmond"], {
+    removalist: P(380, 980),
+    rubbish_removal: P(140, 420),
+  }, 4.1),
+  provider("prov_green_clean", "GreenLeaf Cleaning", ["eol_cleaning", "carpet_cleaning"], ["Preston", "Coburg", "Thornbury"], {
+    eol_cleaning: P(290, 640),
+    carpet_cleaning: P(125, 260),
+  }, 4.5),
+  provider("prov_southside_clean", "Southside Bond Cleans", ["eol_cleaning"], ["South Yarra", "St Kilda"], {
+    eol_cleaning: P(340, 720),
+  }, 4.4),
+  provider("prov_steamline", "SteamLine Carpets", ["carpet_cleaning"], ["Footscray", "Brunswick", "Coburg", "Preston"], {
+    carpet_cleaning: P(115, 280),
+  }, 4.3),
+  provider("prov_clear_outs", "ClearOuts Rubbish", ["rubbish_removal"], ["South Yarra", "St Kilda", "Hawthorn"], {
+    rubbish_removal: P(130, 480),
+  }, 4.0),
+  provider("prov_lock_n_store", "Lock-n-Store Self Storage", ["storage"], ["Richmond", "Collingwood", "Hawthorn", "South Yarra"], {
+    storage: P(110, 360),
+  }, 4.5),
+  provider("prov_handy_heroes", "Handy Heroes", ["handyman"], ["Northcote", "Thornbury", "Brunswick", "Fitzroy"], {
+    handyman: P(140, 520),
+  }, 4.6),
+  provider("prov_powerline", "PowerLine Connections", ["utilities"], SUBURBS, {
+    utilities: P(0, 80),
+  }, 4.3),
+);
+
 function customer(id: string, name: string, suburb: string, propertySize: Customer["propertySize"]): Customer {
   return {
     id,
@@ -133,6 +170,9 @@ const CUSTOMERS: Customer[] = [
   customer("cust_taylor", "Taylor Brown", "Hawthorn", "3br"),
   customer("cust_robin", "Robin Park", "Fitzroy", "1br"),
   customer("cust_kai", "Kai Nguyen", "Preston", "2br"),
+  customer("cust_nina", "Nina Roy", "Coburg", "2br"),
+  customer("cust_drew", "Drew Carter", "Collingwood", "1br"),
+  customer("cust_yuki", "Yuki Sato", "Carlton", "studio"),
 ];
 
 function audit(
