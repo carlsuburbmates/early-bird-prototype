@@ -566,6 +566,131 @@ function buildSeed(): AppState {
     });
   }
 
+  // 9) Cancelled request — still visible in Ops until closed.
+  {
+    const r: MoveRequest = {
+      id: "req_009",
+      customerId: "cust_drew",
+      services: ["removalist"],
+      selectedProviderIds: { removalist: "prov_yarra_movers" },
+      packageEstimate: providerById["prov_yarra_movers"].pricingRanges.removalist!,
+      priority: "low",
+      state: "cancelled",
+      nextAction: "—",
+      createdAt: addHours(NOW, -36),
+    };
+    requests.push(r);
+    audits.push(audit("request", r.id, "request.submitted", r.createdAt, "submitted", "", "customer"));
+    audits.push(
+      audit("request", r.id, "request.cancelled", addHours(NOW, -30), "cancelled", "Customer changed plans", "customer"),
+    );
+  }
+
+  // 10) All providers declined — escalated for operator review.
+  {
+    const r: MoveRequest = {
+      id: "req_010",
+      customerId: "cust_nina",
+      services: ["carpet_cleaning"],
+      selectedProviderIds: { carpet_cleaning: "prov_steamline" },
+      packageEstimate: providerById["prov_steamline"].pricingRanges.carpet_cleaning!,
+      priority: "normal",
+      state: "escalated",
+      nextAction: "All eligible providers declined",
+      createdAt: addHours(NOW, -40),
+    };
+    requests.push(r);
+    const decliners = ["prov_steamline", "prov_green_clean", "prov_west_clean", "prov_sparkle_clean", "prov_carpet_pros"];
+    decliners.forEach((pid, i) => {
+      const inv: ProviderInvitation = {
+        id: `inv_010${String.fromCharCode(97 + i)}`,
+        requestId: r.id,
+        providerId: pid,
+        category: "carpet_cleaning",
+        state: "declined",
+        sentAt: addHours(NOW, -40 + i * 4),
+        respondedAt: addHours(NOW, -38 + i * 4),
+        reminderCount: 0,
+      };
+      invitations.push(inv);
+      audits.push(
+        audit("invitation", inv.id, "invitation.declined", inv.respondedAt!, "declined", "Booked out", "provider"),
+      );
+    });
+    exceptions.push({
+      id: "exc_010",
+      requestId: r.id,
+      type: "all_providers_declined",
+      openedAt: addHours(NOW, -16),
+      severity: "critical",
+      note: "No remaining carpet cleaners in suburb",
+    });
+    audits.push(audit("exception", "exc_010", "exception.opened", addHours(NOW, -16), undefined, "All providers declined"));
+  }
+
+  // 11) Details released but not yet completed — provider has the customer
+  //     but the job hasn't been marked done.
+  {
+    const r: MoveRequest = {
+      id: "req_011",
+      customerId: "cust_yuki",
+      services: ["removalist"],
+      selectedProviderIds: { removalist: "prov_inner_movers" },
+      packageEstimate: providerById["prov_inner_movers"].pricingRanges.removalist!,
+      priority: "normal",
+      state: "details_released",
+      nextAction: "Provider contacting customer",
+      createdAt: addHours(NOW, -54),
+    };
+    requests.push(r);
+    const inv: ProviderInvitation = {
+      id: "inv_011a",
+      requestId: r.id,
+      providerId: "prov_inner_movers",
+      category: "removalist",
+      state: "accepted",
+      sentAt: addHours(NOW, -54),
+      respondedAt: addHours(NOW, -50),
+      reminderCount: 0,
+    };
+    invitations.push(inv);
+    const fee: IntroductionFee = {
+      id: "fee_011a",
+      invitationId: inv.id,
+      providerId: inv.providerId,
+      requestId: r.id,
+      category: "removalist",
+      amount: INTRODUCTION_FEES.removalist,
+      currency: "AUD",
+      status: "paid",
+      dueAt: addHours(NOW, -26),
+      paidAt: addHours(NOW, -48),
+      reminderCount: 0,
+    };
+    fees.push(fee);
+    const c = CUSTOMERS.find((c) => c.id === r.customerId)!;
+    releases.push({
+      id: "rel_011a",
+      requestId: r.id,
+      providerId: inv.providerId,
+      feeId: fee.id,
+      category: "removalist",
+      releasedAt: addHours(NOW, -48),
+      payload: {
+        name: c.name,
+        email: c.email,
+        phone: c.phone,
+        preferredContact: "phone",
+        moveDate: c.moveDate,
+        fromAddress: c.fromAddress,
+        toAddress: c.toAddress,
+      },
+    });
+    audits.push(audit("invitation", inv.id, "invitation.accepted", inv.respondedAt!, "accepted", "", "provider"));
+    audits.push(audit("fee", fee.id, "fee.paid", fee.paidAt!, "paid", "", "provider"));
+    audits.push(audit("release", "rel_011a", "release.created", fee.paidAt!, undefined, "Customer details released"));
+  }
+
   return {
     demo: {
       virtualNow: NOW,
