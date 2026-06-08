@@ -1,15 +1,21 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Inbox, AlertTriangle, Workflow, FileClock, Users } from "lucide-react";
+import {
+  LayoutDashboard, Inbox, AlertTriangle, Workflow, FileClock, Users,
+  Receipt, UserCircle2, HeartPulse,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type NavItem = { to: string; label: string; Icon: typeof LayoutDashboard; exact?: boolean };
 const NAV: NavItem[] = [
   { to: "/ops", label: "Dashboard", Icon: LayoutDashboard, exact: true },
   { to: "/ops/requests", label: "Requests", Icon: Inbox },
+  { to: "/ops/billing", label: "Billing", Icon: Receipt },
+  { to: "/ops/customers", label: "Customers", Icon: UserCircle2 },
   { to: "/ops/providers", label: "Providers", Icon: Users },
   { to: "/ops/exceptions", label: "Exceptions", Icon: AlertTriangle },
   { to: "/ops/automations", label: "Automations", Icon: Workflow },
   { to: "/ops/audit", label: "Audit log", Icon: FileClock },
+  { to: "/ops/health", label: "Health", Icon: HeartPulse },
 ];
 
 export function OpsSidebar() {

@@ -12,7 +12,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { DemoBar } from "@/components/shared/DemoBar";
-import { useStore } from "@/mock/store";
+import { useAutomationTicker } from "@/mock/useAutomationTicker";
+import { isDemoMode } from "@/mock/demo";
 
 function NotFoundComponent() {
   return (
@@ -118,17 +119,13 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
-  // Automation ticker — checks for due jobs every 1.5s (virtual clock).
-  const runDue = useStore((s) => s.runDue);
-  useEffect(() => {
-    const t = setInterval(() => runDue(), 1500);
-    return () => clearInterval(t);
-  }, [runDue]);
+  // Demo-only automation ticker. No-op in production.
+  useAutomationTicker(2000);
 
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen bg-background">
-        <DemoBar />
+        {isDemoMode() && <DemoBar />}
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
       </div>

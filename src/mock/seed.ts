@@ -107,6 +107,43 @@ const PROVIDERS: Provider[] = [
   }, 4.6),
 ];
 
+// Additional providers to reach 20+ and to cover scenarios where every
+// in-suburb option is exhausted (decline / expire / all-declined paths).
+PROVIDERS.push(
+  provider("prov_inner_movers", "Inner City Removals", ["removalist"], ["Carlton", "Fitzroy", "Collingwood", "Richmond"], {
+    removalist: P(520, 1350),
+  }, 4.6),
+  provider("prov_west_movers", "Westgate Movers", ["removalist"], ["Footscray", "Brunswick"], {
+    removalist: P(420, 1150),
+  }, 4.2),
+  provider("prov_two_guys", "Two Guys & a Truck", ["removalist", "rubbish_removal"], ["Hawthorn", "South Yarra", "St Kilda", "Richmond"], {
+    removalist: P(380, 980),
+    rubbish_removal: P(140, 420),
+  }, 4.1),
+  provider("prov_green_clean", "GreenLeaf Cleaning", ["eol_cleaning", "carpet_cleaning"], ["Preston", "Coburg", "Thornbury"], {
+    eol_cleaning: P(290, 640),
+    carpet_cleaning: P(125, 260),
+  }, 4.5),
+  provider("prov_southside_clean", "Southside Bond Cleans", ["eol_cleaning"], ["South Yarra", "St Kilda"], {
+    eol_cleaning: P(340, 720),
+  }, 4.4),
+  provider("prov_steamline", "SteamLine Carpets", ["carpet_cleaning"], ["Footscray", "Brunswick", "Coburg", "Preston"], {
+    carpet_cleaning: P(115, 280),
+  }, 4.3),
+  provider("prov_clear_outs", "ClearOuts Rubbish", ["rubbish_removal"], ["South Yarra", "St Kilda", "Hawthorn"], {
+    rubbish_removal: P(130, 480),
+  }, 4.0),
+  provider("prov_lock_n_store", "Lock-n-Store Self Storage", ["storage"], ["Richmond", "Collingwood", "Hawthorn", "South Yarra"], {
+    storage: P(110, 360),
+  }, 4.5),
+  provider("prov_handy_heroes", "Handy Heroes", ["handyman"], ["Northcote", "Thornbury", "Brunswick", "Fitzroy"], {
+    handyman: P(140, 520),
+  }, 4.6),
+  provider("prov_powerline", "PowerLine Connections", ["utilities"], SUBURBS, {
+    utilities: P(0, 80),
+  }, 4.3),
+);
+
 function customer(id: string, name: string, suburb: string, propertySize: Customer["propertySize"]): Customer {
   return {
     id,
@@ -133,6 +170,9 @@ const CUSTOMERS: Customer[] = [
   customer("cust_taylor", "Taylor Brown", "Hawthorn", "3br"),
   customer("cust_robin", "Robin Park", "Fitzroy", "1br"),
   customer("cust_kai", "Kai Nguyen", "Preston", "2br"),
+  customer("cust_nina", "Nina Roy", "Coburg", "2br"),
+  customer("cust_drew", "Drew Carter", "Collingwood", "1br"),
+  customer("cust_yuki", "Yuki Sato", "Carlton", "studio"),
 ];
 
 function audit(
@@ -524,6 +564,131 @@ function buildSeed(): AppState {
       author: "operator",
       body: "Reaching out to SafeStore manually about extending coverage.",
     });
+  }
+
+  // 9) Cancelled request — still visible in Ops until closed.
+  {
+    const r: MoveRequest = {
+      id: "req_009",
+      customerId: "cust_drew",
+      services: ["removalist"],
+      selectedProviderIds: { removalist: "prov_yarra_movers" },
+      packageEstimate: providerById["prov_yarra_movers"].pricingRanges.removalist!,
+      priority: "low",
+      state: "cancelled",
+      nextAction: "—",
+      createdAt: addHours(NOW, -36),
+    };
+    requests.push(r);
+    audits.push(audit("request", r.id, "request.submitted", r.createdAt, "submitted", "", "customer"));
+    audits.push(
+      audit("request", r.id, "request.cancelled", addHours(NOW, -30), "cancelled", "Customer changed plans", "customer"),
+    );
+  }
+
+  // 10) All providers declined — escalated for operator review.
+  {
+    const r: MoveRequest = {
+      id: "req_010",
+      customerId: "cust_nina",
+      services: ["carpet_cleaning"],
+      selectedProviderIds: { carpet_cleaning: "prov_steamline" },
+      packageEstimate: providerById["prov_steamline"].pricingRanges.carpet_cleaning!,
+      priority: "normal",
+      state: "escalated",
+      nextAction: "All eligible providers declined",
+      createdAt: addHours(NOW, -40),
+    };
+    requests.push(r);
+    const decliners = ["prov_steamline", "prov_green_clean", "prov_west_clean", "prov_sparkle_clean", "prov_carpet_pros"];
+    decliners.forEach((pid, i) => {
+      const inv: ProviderInvitation = {
+        id: `inv_010${String.fromCharCode(97 + i)}`,
+        requestId: r.id,
+        providerId: pid,
+        category: "carpet_cleaning",
+        state: "declined",
+        sentAt: addHours(NOW, -40 + i * 4),
+        respondedAt: addHours(NOW, -38 + i * 4),
+        reminderCount: 0,
+      };
+      invitations.push(inv);
+      audits.push(
+        audit("invitation", inv.id, "invitation.declined", inv.respondedAt!, "declined", "Booked out", "provider"),
+      );
+    });
+    exceptions.push({
+      id: "exc_010",
+      requestId: r.id,
+      type: "all_providers_declined",
+      openedAt: addHours(NOW, -16),
+      severity: "critical",
+      note: "No remaining carpet cleaners in suburb",
+    });
+    audits.push(audit("exception", "exc_010", "exception.opened", addHours(NOW, -16), undefined, "All providers declined"));
+  }
+
+  // 11) Details released but not yet completed — provider has the customer
+  //     but the job hasn't been marked done.
+  {
+    const r: MoveRequest = {
+      id: "req_011",
+      customerId: "cust_yuki",
+      services: ["removalist"],
+      selectedProviderIds: { removalist: "prov_inner_movers" },
+      packageEstimate: providerById["prov_inner_movers"].pricingRanges.removalist!,
+      priority: "normal",
+      state: "details_released",
+      nextAction: "Provider contacting customer",
+      createdAt: addHours(NOW, -54),
+    };
+    requests.push(r);
+    const inv: ProviderInvitation = {
+      id: "inv_011a",
+      requestId: r.id,
+      providerId: "prov_inner_movers",
+      category: "removalist",
+      state: "accepted",
+      sentAt: addHours(NOW, -54),
+      respondedAt: addHours(NOW, -50),
+      reminderCount: 0,
+    };
+    invitations.push(inv);
+    const fee: IntroductionFee = {
+      id: "fee_011a",
+      invitationId: inv.id,
+      providerId: inv.providerId,
+      requestId: r.id,
+      category: "removalist",
+      amount: INTRODUCTION_FEES.removalist,
+      currency: "AUD",
+      status: "paid",
+      dueAt: addHours(NOW, -26),
+      paidAt: addHours(NOW, -48),
+      reminderCount: 0,
+    };
+    fees.push(fee);
+    const c = CUSTOMERS.find((c) => c.id === r.customerId)!;
+    releases.push({
+      id: "rel_011a",
+      requestId: r.id,
+      providerId: inv.providerId,
+      feeId: fee.id,
+      category: "removalist",
+      releasedAt: addHours(NOW, -48),
+      payload: {
+        name: c.name,
+        email: c.email,
+        phone: c.phone,
+        preferredContact: "phone",
+        moveDate: c.moveDate,
+        fromAddress: c.fromAddress,
+        toAddress: c.toAddress,
+      },
+    });
+    audits.push(audit("invitation", inv.id, "invitation.accepted", inv.respondedAt!, "accepted", "", "provider"));
+    audits.push(audit("fee", fee.id, "fee.paid", fee.paidAt!, "paid", "", "provider"));
+    audits.push(audit("release", "rel_011a", "release.created", fee.paidAt!, undefined, "Customer details released"));
   }
 
   return {
