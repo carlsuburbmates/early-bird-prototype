@@ -7,10 +7,9 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { DemoBar } from "@/components/shared/DemoBar";
 import { useAutomationTicker } from "@/mock/useAutomationTicker";
 import { isDemoMode } from "@/mock/demo";
@@ -40,10 +39,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -81,10 +76,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "LeaseMate" },
-      { name: "description", content: "Rental move-out coordination prototype" },
+      { name: "description", content: "LeaseMate move-out service marketplace prototype" },
       { name: "author", content: "LeaseMate" },
       { property: "og:title", content: "LeaseMate" },
-      { property: "og:description", content: "Rental move-out coordination prototype" },
+      { property: "og:description", content: "LeaseMate move-out service marketplace prototype" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
