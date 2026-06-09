@@ -41,6 +41,65 @@ export type Urgency = "flexible" | "standard" | "urgent";
 export type BudgetSensitivity = "low" | "medium" | "high";
 export type RecommendationMode = "recommend" | "manual";
 
+export type RoutingPosition = "preferred" | "backup";
+
+export type ProductStatus = "active" | "paused";
+
+export interface ServiceProduct {
+  id: ID;
+  providerId: ID;
+  category: ServiceCategory;
+  title: string;
+  description: string;
+  serviceAreas: string[];
+  propertyTypes: PropertySize[];
+  pickupCatchments?: string[];
+  destinationCatchments?: string[];
+  includedServices: string[];
+  excludedServices: string[];
+  addOns: string[];
+  estimatedRange: PriceRange;
+  status: ProductStatus;
+}
+
+export type CartItemState =
+  | "not_started"
+  | "preferred_invited"
+  | "preferred_declined"
+  | "preferred_expired"
+  | "backup_invited"
+  | "accepted"
+  | "payment_pending"
+  | "paid"
+  | "released"
+  | "completed"
+  | "unresolved"
+  | "escalated"
+  | "cancelled";
+
+export type CustomerReleaseState =
+  | "not_ready"
+  | "payment_pending"
+  | "ready_to_release"
+  | "released"
+  | "blocked";
+
+export interface CartItem {
+  id: ID;
+  requestId: ID;
+  category: ServiceCategory;
+  preferredServiceProductId: ID;
+  backupServiceProductId?: ID;
+  activeServiceProductId?: ID;
+  preferredProviderId: ID;
+  backupProviderId?: ID;
+  positionInProgress?: RoutingPosition;
+  state: CartItemState;
+  estimatedRange: PriceRange;
+  nextAction?: string;
+  slaDueAt?: string;
+}
+
 export interface Customer {
   id: ID;
   name: string;
@@ -122,19 +181,16 @@ export interface MoveRequest {
   createdAt: string;
 }
 
-export type InvitationState =
-  | "not_sent"
-  | "sent"
-  | "viewed"
-  | "accepted"
-  | "declined"
-  | "expired";
+export type InvitationState = "not_sent" | "sent" | "viewed" | "accepted" | "declined" | "expired";
 
 export interface ProviderInvitation {
   id: ID;
   requestId: ID;
   providerId: ID;
   category: ServiceCategory;
+  cartItemId?: ID;
+  serviceProductId?: ID;
+  position?: RoutingPosition;
   state: InvitationState;
   sentAt?: string;
   respondedAt?: string;
@@ -150,6 +206,9 @@ export interface IntroductionFee {
   providerId: ID;
   requestId: ID;
   category: ServiceCategory;
+  cartItemId?: ID;
+  serviceProductId?: ID;
+  position?: RoutingPosition;
   amount: number;
   currency: "AUD";
   status: FeeStatus;
@@ -164,6 +223,9 @@ export interface CustomerRelease {
   providerId: ID;
   feeId: ID;
   category: ServiceCategory;
+  cartItemId?: ID;
+  serviceProductId?: ID;
+  releaseState?: CustomerReleaseState;
   releasedAt: string;
   payload: {
     name: string;
@@ -183,16 +245,23 @@ export type AutomationType =
   | "expire_invitation"
   | "escalate_no_provider"
   | "send_fee_reminder"
-  | "expire_fee";
+  | "expire_fee"
+  | "invite_preferred_provider"
+  | "invite_backup_provider"
+  | "mark_payment_overdue"
+  | "escalate_cart_item"
+  | "customer_update_required";
 
 export interface AutomationJob {
   id: ID;
   requestId: ID;
   invitationId?: ID;
   feeId?: ID;
+  cartItemId?: ID;
+  serviceProductId?: ID;
   type: AutomationType;
   scheduledFor: string;
-  status: "scheduled" | "running" | "done" | "failed" | "cancelled";
+  status: "scheduled" | "running" | "done" | "completed" | "failed" | "paused" | "cancelled";
   lastRunAt?: string;
   lastResult?: string;
 }
@@ -208,6 +277,8 @@ export interface Exception {
   id: ID;
   requestId: ID;
   type: ExceptionType;
+  cartItemId?: ID;
+  serviceProductId?: ID;
   openedAt: string;
   resolvedAt?: string;
   note?: string;
@@ -223,7 +294,9 @@ export interface AuditEvent {
     | "provider"
     | "customer"
     | "exception"
-    | "release";
+    | "release"
+    | "cart_item"
+    | "service_product";
   entityId: ID;
   eventType: string;
   actor: "system" | "operator" | "customer" | "provider";
@@ -254,7 +327,9 @@ export interface AppState {
   demo: DemoState;
   customers: Customer[];
   providers: Provider[];
+  serviceProducts: ServiceProduct[];
   requests: MoveRequest[];
+  cartItems: CartItem[];
   invitations: ProviderInvitation[];
   fees: IntroductionFee[];
   releases: CustomerRelease[];

@@ -15,7 +15,7 @@ LeaseMate is a rental move-out service marketplace and coordination platform for
 This document should guide:
 
 * frontend prototype refinement
-* Lovable-generated prototype evaluation
+* prototype evaluation
 * Codex Cloud cleanup tasks
 * local development setup
 * future production rebuild planning
@@ -2163,7 +2163,7 @@ No:
 * real email
 * SMS
 * external APIs
-* Lovable backend integrations
+* prototype-only backend integrations
 * production database
 * real payments
 * real accounts
@@ -2351,10 +2351,10 @@ The prototype is acceptable when:
 
 41. Local / GitHub Migration Acceptance Criteria
 
-Before moving from Lovable prototype to full local/GitHub-first continuation:
+Before moving from prototype to full local/GitHub-first continuation:
 
 * root metadata uses LeaseMate branding
-* no active Lovable external reporting exists
+* no active external prototype reporting exists
 * build passes, or blockers are clearly documented
 * main routes import cleanly
 * demo controls remain gated
@@ -2511,7 +2511,7 @@ AI builders or coding agents may expand scope, add backend services, or reinterp
 
 Risk 8 — Prototype Lock-In
 
-Prototype logic must not be tied to Lovable-only systems or hidden integrations.
+Prototype logic must not be tied to platform-only systems or hidden integrations.
 
 ⸻
 
@@ -2594,7 +2594,7 @@ The prototype’s purpose is to validate:
 
 49. Agent / Codex Guardrails
 
-When using Lovable, Codex, Cursor, OpenCode, or other AI coding agents:
+When using Codex, Cursor, OpenCode, or other AI coding agents:
 
 Agents must not:
 
@@ -2636,3 +2636,8 @@ This PRD is complete for the current frontend prototype and local-readiness phas
 It is not a production engineering specification.
 
 Production backend, payments, auth, communications, legal terms, provider verification, and commercial validation remain future decisions.
+⸻
+
+51. Prototype Implementation Note
+
+The current prototype aligns the Ops surface to the locked marketplace model by adding mock service products and cart items, cart-item routing views, provider invitation queues, billing/release context, supply coverage, and health metrics. These are demo-only frontend constructs and must not be interpreted as production backend, payment, auth, communications, or external integration work.

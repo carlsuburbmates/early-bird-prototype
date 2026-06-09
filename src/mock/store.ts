@@ -8,14 +8,7 @@
  */
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type {
-  AppState,
-  DemoRole,
-  ID,
-  MoveRequest,
-  Priority,
-  RequestState,
-} from "./types";
+import type { AppState, DemoRole, ID, MoveRequest, Priority, RequestState } from "./types";
 import { freshSeed } from "./seed";
 import {
   payIntroductionFee,
@@ -53,14 +46,17 @@ type Store = AppState & StoreActions;
 
 const STORAGE_KEY = "leasemate.demo.v1";
 
-function pushAudit(state: AppState, entry: {
-  entityType: AppState["audit"][number]["entityType"];
-  entityId: ID;
-  eventType: string;
-  newState?: string;
-  notes?: string;
-  actor?: AppState["audit"][number]["actor"];
-}): AppState["audit"] {
+function pushAudit(
+  state: AppState,
+  entry: {
+    entityType: AppState["audit"][number]["entityType"];
+    entityId: ID;
+    eventType: string;
+    newState?: string;
+    notes?: string;
+    actor?: AppState["audit"][number]["actor"];
+  },
+): AppState["audit"] {
   return [
     ...state.audit,
     {
@@ -112,14 +108,20 @@ export const useStore = create<Store>()(
       pauseRequest: (id) =>
         set((s) => ({
           requests: s.requests.map((r) =>
-            r.id === id ? { ...r, pausedAt: s.demo.virtualNow, nextAction: "Paused by operator" } : r,
+            r.id === id
+              ? { ...r, pausedAt: s.demo.virtualNow, nextAction: "Paused by operator" }
+              : r,
           ),
           audit: pushAudit(s, { entityType: "request", entityId: id, eventType: "request.paused" }),
         })),
       resumeRequest: (id) =>
         set((s) => ({
           requests: s.requests.map((r) => (r.id === id ? { ...r, pausedAt: undefined } : r)),
-          audit: pushAudit(s, { entityType: "request", entityId: id, eventType: "request.resumed" }),
+          audit: pushAudit(s, {
+            entityType: "request",
+            entityId: id,
+            eventType: "request.resumed",
+          }),
         })),
       cancelRequest: (id) =>
         set((s) => ({
@@ -128,7 +130,12 @@ export const useStore = create<Store>()(
           ),
           automations: s.automations.map((a) =>
             a.requestId === id && a.status === "scheduled"
-              ? { ...a, status: "cancelled" as const, lastRunAt: s.demo.virtualNow, lastResult: "Request cancelled" }
+              ? {
+                  ...a,
+                  status: "cancelled" as const,
+                  lastRunAt: s.demo.virtualNow,
+                  lastResult: "Request cancelled",
+                }
               : a,
           ),
           audit: pushAudit(s, {
@@ -208,6 +215,8 @@ export const useStore = create<Store>()(
 export const selectRequest = (id: string) => (s: AppState) => s.requests.find((r) => r.id === id);
 export const selectCustomer = (id: string) => (s: AppState) => s.customers.find((c) => c.id === id);
 export const selectProvider = (id: string) => (s: AppState) => s.providers.find((p) => p.id === id);
+export const selectCartItemsForRequest = (id: string) => (s: AppState) =>
+  s.cartItems.filter((i) => i.requestId === id);
 export const selectInvitationsForRequest = (id: string) => (s: AppState) =>
   s.invitations.filter((i) => i.requestId === id);
 export const selectFeesForRequest = (id: string) => (s: AppState) =>
@@ -221,7 +230,13 @@ export const selectExceptionsForRequest = (id: string) => (s: AppState) =>
 export const selectNotesForRequest = (id: string) => (s: AppState) =>
   s.notes.filter((n) => n.requestId === id);
 export const selectAuditForRequest = (id: string) => (s: AppState) => {
+  const cartItemIds = new Set(s.cartItems.filter((i) => i.requestId === id).map((i) => i.id));
   const invIds = new Set(s.invitations.filter((i) => i.requestId === id).map((i) => i.id));
+  const serviceProductIds = new Set(
+    s.invitations
+      .filter((i) => i.requestId === id && i.serviceProductId)
+      .map((i) => i.serviceProductId!),
+  );
   const feeIds = new Set(s.fees.filter((f) => f.requestId === id).map((f) => f.id));
   const excIds = new Set(s.exceptions.filter((e) => e.requestId === id).map((e) => e.id));
   const relIds = new Set(s.releases.filter((r) => r.requestId === id).map((r) => r.id));
@@ -229,6 +244,8 @@ export const selectAuditForRequest = (id: string) => (s: AppState) => {
     .filter(
       (a) =>
         (a.entityType === "request" && a.entityId === id) ||
+        (a.entityType === "cart_item" && cartItemIds.has(a.entityId)) ||
+        (a.entityType === "service_product" && serviceProductIds.has(a.entityId)) ||
         (a.entityType === "invitation" && invIds.has(a.entityId)) ||
         (a.entityType === "fee" && feeIds.has(a.entityId)) ||
         (a.entityType === "exception" && excIds.has(a.entityId)) ||
