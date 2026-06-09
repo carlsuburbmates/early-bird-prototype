@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ProviderSignupRouteImport } from './routes/provider-signup'
 import { Route as ProviderRouteImport } from './routes/provider'
 import { Route as OpsRouteImport } from './routes/ops'
 import { Route as IntakeRouteImport } from './routes/intake'
@@ -21,6 +22,7 @@ import { Route as OpsIndexRouteImport } from './routes/ops.index'
 import { Route as SubmittedIdRouteImport } from './routes/submitted.$id'
 import { Route as RequestIdRouteImport } from './routes/request.$id'
 import { Route as OpsRequestsRouteImport } from './routes/ops.requests'
+import { Route as OpsProvidersQueueRouteImport } from './routes/ops.providers-queue'
 import { Route as OpsProvidersRouteImport } from './routes/ops.providers'
 import { Route as OpsHealthRouteImport } from './routes/ops.health'
 import { Route as OpsExceptionsRouteImport } from './routes/ops.exceptions'
@@ -33,6 +35,11 @@ import { Route as OpsRequestsIdRouteImport } from './routes/ops.requests.$id'
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProviderSignupRoute = ProviderSignupRouteImport.update({
+  id: '/provider-signup',
+  path: '/provider-signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProviderRoute = ProviderRouteImport.update({
@@ -90,6 +97,11 @@ const OpsRequestsRoute = OpsRequestsRouteImport.update({
   path: '/requests',
   getParentRoute: () => OpsRoute,
 } as any)
+const OpsProvidersQueueRoute = OpsProvidersQueueRouteImport.update({
+  id: '/providers-queue',
+  path: '/providers-queue',
+  getParentRoute: () => OpsRoute,
+} as any)
 const OpsProvidersRoute = OpsProvidersRouteImport.update({
   id: '/providers',
   path: '/providers',
@@ -139,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/intake': typeof IntakeRoute
   '/ops': typeof OpsRouteWithChildren
   '/provider': typeof ProviderRoute
+  '/provider-signup': typeof ProviderSignupRoute
   '/services': typeof ServicesRoute
   '/ops/audit': typeof OpsAuditRoute
   '/ops/automations': typeof OpsAutomationsRoute
@@ -147,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/health': typeof OpsHealthRoute
   '/ops/providers': typeof OpsProvidersRoute
+  '/ops/providers-queue': typeof OpsProvidersQueueRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
   '/request/$id': typeof RequestIdRoute
   '/submitted/$id': typeof SubmittedIdRoute
@@ -160,6 +174,7 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof HowItWorksRoute
   '/intake': typeof IntakeRoute
   '/provider': typeof ProviderRoute
+  '/provider-signup': typeof ProviderSignupRoute
   '/services': typeof ServicesRoute
   '/ops/audit': typeof OpsAuditRoute
   '/ops/automations': typeof OpsAutomationsRoute
@@ -168,6 +183,7 @@ export interface FileRoutesByTo {
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/health': typeof OpsHealthRoute
   '/ops/providers': typeof OpsProvidersRoute
+  '/ops/providers-queue': typeof OpsProvidersQueueRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
   '/request/$id': typeof RequestIdRoute
   '/submitted/$id': typeof SubmittedIdRoute
@@ -183,6 +199,7 @@ export interface FileRoutesById {
   '/intake': typeof IntakeRoute
   '/ops': typeof OpsRouteWithChildren
   '/provider': typeof ProviderRoute
+  '/provider-signup': typeof ProviderSignupRoute
   '/services': typeof ServicesRoute
   '/ops/audit': typeof OpsAuditRoute
   '/ops/automations': typeof OpsAutomationsRoute
@@ -191,6 +208,7 @@ export interface FileRoutesById {
   '/ops/exceptions': typeof OpsExceptionsRoute
   '/ops/health': typeof OpsHealthRoute
   '/ops/providers': typeof OpsProvidersRoute
+  '/ops/providers-queue': typeof OpsProvidersQueueRoute
   '/ops/requests': typeof OpsRequestsRouteWithChildren
   '/request/$id': typeof RequestIdRoute
   '/submitted/$id': typeof SubmittedIdRoute
@@ -207,6 +225,7 @@ export interface FileRouteTypes {
     | '/intake'
     | '/ops'
     | '/provider'
+    | '/provider-signup'
     | '/services'
     | '/ops/audit'
     | '/ops/automations'
@@ -215,6 +234,7 @@ export interface FileRouteTypes {
     | '/ops/exceptions'
     | '/ops/health'
     | '/ops/providers'
+    | '/ops/providers-queue'
     | '/ops/requests'
     | '/request/$id'
     | '/submitted/$id'
@@ -228,6 +248,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/intake'
     | '/provider'
+    | '/provider-signup'
     | '/services'
     | '/ops/audit'
     | '/ops/automations'
@@ -236,6 +257,7 @@ export interface FileRouteTypes {
     | '/ops/exceptions'
     | '/ops/health'
     | '/ops/providers'
+    | '/ops/providers-queue'
     | '/ops/requests'
     | '/request/$id'
     | '/submitted/$id'
@@ -250,6 +272,7 @@ export interface FileRouteTypes {
     | '/intake'
     | '/ops'
     | '/provider'
+    | '/provider-signup'
     | '/services'
     | '/ops/audit'
     | '/ops/automations'
@@ -258,6 +281,7 @@ export interface FileRouteTypes {
     | '/ops/exceptions'
     | '/ops/health'
     | '/ops/providers'
+    | '/ops/providers-queue'
     | '/ops/requests'
     | '/request/$id'
     | '/submitted/$id'
@@ -273,6 +297,7 @@ export interface RootRouteChildren {
   IntakeRoute: typeof IntakeRoute
   OpsRoute: typeof OpsRouteWithChildren
   ProviderRoute: typeof ProviderRoute
+  ProviderSignupRoute: typeof ProviderSignupRoute
   ServicesRoute: typeof ServicesRoute
   RequestIdRoute: typeof RequestIdRoute
   SubmittedIdRoute: typeof SubmittedIdRoute
@@ -285,6 +310,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/provider-signup': {
+      id: '/provider-signup'
+      path: '/provider-signup'
+      fullPath: '/provider-signup'
+      preLoaderRoute: typeof ProviderSignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/provider': {
@@ -362,6 +394,13 @@ declare module '@tanstack/react-router' {
       path: '/requests'
       fullPath: '/ops/requests'
       preLoaderRoute: typeof OpsRequestsRouteImport
+      parentRoute: typeof OpsRoute
+    }
+    '/ops/providers-queue': {
+      id: '/ops/providers-queue'
+      path: '/providers-queue'
+      fullPath: '/ops/providers-queue'
+      preLoaderRoute: typeof OpsProvidersQueueRouteImport
       parentRoute: typeof OpsRoute
     }
     '/ops/providers': {
@@ -443,6 +482,7 @@ interface OpsRouteChildren {
   OpsExceptionsRoute: typeof OpsExceptionsRoute
   OpsHealthRoute: typeof OpsHealthRoute
   OpsProvidersRoute: typeof OpsProvidersRoute
+  OpsProvidersQueueRoute: typeof OpsProvidersQueueRoute
   OpsRequestsRoute: typeof OpsRequestsRouteWithChildren
   OpsIndexRoute: typeof OpsIndexRoute
 }
@@ -455,6 +495,7 @@ const OpsRouteChildren: OpsRouteChildren = {
   OpsExceptionsRoute: OpsExceptionsRoute,
   OpsHealthRoute: OpsHealthRoute,
   OpsProvidersRoute: OpsProvidersRoute,
+  OpsProvidersQueueRoute: OpsProvidersQueueRoute,
   OpsRequestsRoute: OpsRequestsRouteWithChildren,
   OpsIndexRoute: OpsIndexRoute,
 }
@@ -469,6 +510,7 @@ const rootRouteChildren: RootRouteChildren = {
   IntakeRoute: IntakeRoute,
   OpsRoute: OpsRouteWithChildren,
   ProviderRoute: ProviderRoute,
+  ProviderSignupRoute: ProviderSignupRoute,
   ServicesRoute: ServicesRoute,
   RequestIdRoute: RequestIdRoute,
   SubmittedIdRoute: SubmittedIdRoute,
@@ -476,3 +518,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
