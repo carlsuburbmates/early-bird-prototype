@@ -1036,3 +1036,8 @@ Audit history preserves trust.
 System Health shows whether the business is functioning.
 
 The operator intervenes selectively, not constantly.
+⸻
+
+23. Prototype Implementation Note
+
+The current prototype demonstrates the operating model with local mock data only. Service-product supply, Move-Out Cart items, preferred/backup routing, invitations, intro fees, customer releases, exceptions, automations, audit history, and health metrics are represented for operator visibility without production infrastructure.

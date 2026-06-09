@@ -1251,3 +1251,9 @@ The LeaseMate Operations Center is a cart-item workflow control surface.
 It must let the operator supervise every submitted Move-Out Cart, every provider-listed service product selected by the customer, every preferred/backup routing attempt, every provider invitation, every introduction fee, every customer detail release, every exception, every automation, and every audit event.
 
 The Operations Center exists to make a solo-operated, automation-first marketplace practical without hiding the workflow.
+
+---
+
+# 25. Prototype Implementation Note
+
+The current frontend prototype now models service products and cart items as first-class mock entities. Ops routes should use the cart-item routing matrix, provider queue, billing queue, provider supply/coverage, health metrics, automations, exceptions, and audit history as mock/demo views of the approved model. This remains in-browser demo data only; it does not add backend services, real payments, auth, SMS/email, external APIs, or production integrations.

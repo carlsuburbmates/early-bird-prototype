@@ -60,7 +60,11 @@ function updateInvitation(
   return state.invitations.map((i) => (i.id === id ? { ...i, ...patch } : i));
 }
 
-function updateFee(state: AppState, id: string, patch: Partial<IntroductionFee>): IntroductionFee[] {
+function updateFee(
+  state: AppState,
+  id: string,
+  patch: Partial<IntroductionFee>,
+): IntroductionFee[] {
   return state.fees.map((f) => (f.id === id ? { ...f, ...patch } : f));
 }
 
@@ -78,7 +82,9 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
     };
   }
 
-  const baseDone = (lastResult: string): Pick<AutomationJob, "status" | "lastRunAt" | "lastResult"> => ({
+  const baseDone = (
+    lastResult: string,
+  ): Pick<AutomationJob, "status" | "lastRunAt" | "lastResult"> => ({
     status: "done",
     lastRunAt: now,
     lastResult,
@@ -87,9 +93,11 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
   switch (job.type) {
     case "invite_next_provider": {
       // For the first category without an active invitation, create one.
-      let newInvitations = [...state.invitations];
-      let newAutomations = state.automations.map((a) => (a.id === job.id ? { ...a, ...baseDone("Invited next provider") } : a));
-      let newAudit = [...state.audit];
+      const newInvitations = [...state.invitations];
+      const newAutomations = state.automations.map((a) =>
+        a.id === job.id ? { ...a, ...baseDone("Invited next provider") } : a,
+      );
+      const newAudit = [...state.audit];
       let invited = false;
       let exhausted = false;
       for (const category of req.services) {
@@ -102,11 +110,18 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
         if (activeForCategory) continue;
         const preferredId = req.selectedProviderIds[category];
         const alreadyInvitedIds = new Set(
-          newInvitations.filter((i) => i.requestId === req.id && i.category === category).map((i) => i.providerId),
+          newInvitations
+            .filter((i) => i.requestId === req.id && i.category === category)
+            .map((i) => i.providerId),
         );
-        let providerId = preferredId && !alreadyInvitedIds.has(preferredId) ? preferredId : undefined;
+        let providerId =
+          preferredId && !alreadyInvitedIds.has(preferredId) ? preferredId : undefined;
         if (!providerId) {
-          const fallback = nextEligibleProvider({ ...state, invitations: newInvitations }, req, category);
+          const fallback = nextEligibleProvider(
+            { ...state, invitations: newInvitations },
+            req,
+            category,
+          );
           providerId = fallback?.id;
         }
         if (!providerId) {
@@ -149,19 +164,20 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
         nextAction: invited ? "Awaiting provider response" : "Operator review",
         slaDueAt: invited ? addMinutes(now, SLA.invitationReminderMins) : req.slaDueAt,
       });
-      const newExceptions = exhausted && !invited
-        ? [
-            ...state.exceptions,
-            {
-              id: newId("exc"),
-              requestId: req.id,
-              type: "no_provider_matched" as const,
-              openedAt: now,
-              severity: "warning" as const,
-              note: "Exhausted candidate providers",
-            },
-          ]
-        : state.exceptions;
+      const newExceptions =
+        exhausted && !invited
+          ? [
+              ...state.exceptions,
+              {
+                id: newId("exc"),
+                requestId: req.id,
+                type: "no_provider_matched" as const,
+                openedAt: now,
+                severity: "warning" as const,
+                note: "Exhausted candidate providers",
+              },
+            ]
+          : state.exceptions;
       return {
         ...state,
         invitations: newInvitations,
@@ -177,10 +193,14 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
       if (!inv || inv.state !== "sent") {
         return {
           ...state,
-          automations: state.automations.map((a) => (a.id === job.id ? { ...a, ...baseDone("Skipped (invitation resolved)") } : a)),
+          automations: state.automations.map((a) =>
+            a.id === job.id ? { ...a, ...baseDone("Skipped (invitation resolved)") } : a,
+          ),
         };
       }
-      const newInvitations = updateInvitation(state, inv.id, { reminderCount: inv.reminderCount + 1 });
+      const newInvitations = updateInvitation(state, inv.id, {
+        reminderCount: inv.reminderCount + 1,
+      });
       const newAutomations = state.automations
         .map((a) => (a.id === job.id ? { ...a, ...baseDone("Reminder sent (mock)") } : a))
         .concat({
@@ -188,7 +208,8 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
           requestId: req.id,
           invitationId: inv.id,
           type: "expire_invitation",
-          scheduledFor: inv.expiresAt ?? addMinutes(now, SLA.invitationExpiryMins - SLA.invitationReminderMins),
+          scheduledFor:
+            inv.expiresAt ?? addMinutes(now, SLA.invitationExpiryMins - SLA.invitationReminderMins),
           status: "scheduled",
         });
       const newAudit = [
@@ -201,7 +222,12 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
           notes: `Reminder #${inv.reminderCount + 1}`,
         }),
       ];
-      return { ...state, invitations: newInvitations, automations: newAutomations, audit: newAudit };
+      return {
+        ...state,
+        invitations: newInvitations,
+        automations: newAutomations,
+        audit: newAudit,
+      };
     }
 
     case "expire_invitation": {
@@ -209,12 +235,16 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
       if (!inv || inv.state !== "sent") {
         return {
           ...state,
-          automations: state.automations.map((a) => (a.id === job.id ? { ...a, ...baseDone("Skipped (invitation resolved)") } : a)),
+          automations: state.automations.map((a) =>
+            a.id === job.id ? { ...a, ...baseDone("Skipped (invitation resolved)") } : a,
+          ),
         };
       }
       const newInvitations = updateInvitation(state, inv.id, { state: "expired" });
       const newAutomations = state.automations
-        .map((a) => (a.id === job.id ? { ...a, ...baseDone("Invitation expired; routing to next") } : a))
+        .map((a) =>
+          a.id === job.id ? { ...a, ...baseDone("Invitation expired; routing to next") } : a,
+        )
         .concat({
           id: newId("auto"),
           requestId: req.id,
@@ -233,7 +263,12 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
           newState: "expired",
         }),
       ];
-      return { ...state, invitations: newInvitations, automations: newAutomations, audit: newAudit };
+      return {
+        ...state,
+        invitations: newInvitations,
+        automations: newAutomations,
+        audit: newAudit,
+      };
     }
 
     case "send_fee_reminder": {
@@ -241,7 +276,9 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
       if (!fee || fee.status !== "pending") {
         return {
           ...state,
-          automations: state.automations.map((a) => (a.id === job.id ? { ...a, ...baseDone("Skipped (fee resolved)") } : a)),
+          automations: state.automations.map((a) =>
+            a.id === job.id ? { ...a, ...baseDone("Skipped (fee resolved)") } : a,
+          ),
         };
       }
       const overdue = isDue(fee.dueAt, now);
@@ -274,7 +311,13 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
           newState: overdue ? "overdue" : undefined,
         }),
       ];
-      return { ...state, fees: newFees, exceptions: newExceptions, automations: newAutomations, audit: newAudit };
+      return {
+        ...state,
+        fees: newFees,
+        exceptions: newExceptions,
+        automations: newAutomations,
+        audit: newAudit,
+      };
     }
 
     case "expire_fee":
@@ -282,7 +325,9 @@ export function executeJob(state: AppState, job: AutomationJob): AppState {
     default:
       return {
         ...state,
-        automations: state.automations.map((a) => (a.id === job.id ? { ...a, ...baseDone("No-op") } : a)),
+        automations: state.automations.map((a) =>
+          a.id === job.id ? { ...a, ...baseDone("No-op") } : a,
+        ),
       };
   }
 }
@@ -341,6 +386,23 @@ export function providerRespond(
   const inv = state.invitations.find((i) => i.id === invitationId);
   if (!inv) return state;
   const invitations = updateInvitation(state, invitationId, { state: decision, respondedAt: now });
+  const cartItems = state.cartItems.map((item) =>
+    item.id === inv.cartItemId
+      ? {
+          ...item,
+          state:
+            decision === "accepted"
+              ? ("accepted" as const)
+              : inv.position === "backup"
+                ? ("unresolved" as const)
+                : ("preferred_declined" as const),
+          activeServiceProductId: inv.serviceProductId ?? item.activeServiceProductId,
+          positionInProgress: inv.position ?? item.positionInProgress,
+          nextAction:
+            decision === "accepted" ? "Confirm payment received" : "Invite backup provider",
+        }
+      : item,
+  );
   const audit = [
     ...state.audit,
     {
@@ -360,7 +422,12 @@ export function providerRespond(
     const automations = state.automations
       .map((a) =>
         a.invitationId === invitationId && a.status === "scheduled"
-          ? { ...a, status: "cancelled" as const, lastRunAt: now, lastResult: "Invitation declined" }
+          ? {
+              ...a,
+              status: "cancelled" as const,
+              lastRunAt: now,
+              lastResult: "Invitation declined",
+            }
           : a,
       )
       .concat({
@@ -370,7 +437,7 @@ export function providerRespond(
         scheduledFor: now,
         status: "scheduled",
       });
-    return { ...state, invitations, audit, automations };
+    return { ...state, invitations, cartItems, audit, automations };
   }
 
   // accepted → create introduction fee, set request to awaiting_payment
@@ -380,6 +447,9 @@ export function providerRespond(
     providerId: inv.providerId,
     requestId: inv.requestId,
     category: inv.category,
+    cartItemId: inv.cartItemId,
+    serviceProductId: inv.serviceProductId,
+    position: inv.position,
     amount: INTRODUCTION_FEES[inv.category],
     currency: "AUD",
     status: "pending",
@@ -414,7 +484,24 @@ export function providerRespond(
     newState: "pending",
     actor: "system",
   });
-  return { ...state, invitations, fees: [...state.fees, fee], audit, automations, requests };
+  return {
+    ...state,
+    invitations,
+    cartItems: cartItems.map((item) =>
+      item.id === inv.cartItemId
+        ? {
+            ...item,
+            state: "payment_pending" as const,
+            nextAction: "Confirm payment received",
+            slaDueAt: fee.dueAt,
+          }
+        : item,
+    ),
+    fees: [...state.fees, fee],
+    audit,
+    automations,
+    requests,
+  };
 }
 
 /** Mock the provider paying the introduction fee → release customer details. */
@@ -433,6 +520,9 @@ export function payIntroductionFee(state: AppState, feeId: string): AppState {
     providerId: fee.providerId,
     feeId: fee.id,
     category: fee.category,
+    cartItemId: fee.cartItemId,
+    serviceProductId: fee.serviceProductId,
+    releaseState: "released",
     releasedAt: now,
     payload: {
       name: customer.name,
@@ -484,5 +574,24 @@ export function payIntroductionFee(state: AppState, feeId: string): AppState {
       notes: "Customer details released to provider",
     },
   ];
-  return { ...state, fees, releases: [...state.releases, release], requests, automations, exceptions, audit };
+  const cartItems = state.cartItems.map((item) =>
+    item.id === fee.cartItemId
+      ? {
+          ...item,
+          state: "released" as const,
+          nextAction: "Provider has customer details",
+          slaDueAt: undefined,
+        }
+      : item,
+  );
+  return {
+    ...state,
+    cartItems,
+    fees,
+    releases: [...state.releases, release],
+    requests,
+    automations,
+    exceptions,
+    audit,
+  };
 }

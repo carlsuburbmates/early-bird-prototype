@@ -850,3 +850,9 @@ Prototype logic must not become tied to builder-specific systems or hidden integ
 LeaseMate is a renter-focused move-out service marketplace and coordination platform where customers submit a Move-Out Cart of provider-listed service products, providers accept paid exclusive introductions, and an operator supervises the autonomous workflow through a full-visibility Operations Center.
 
 This document is the highest authority for the project’s intended identity, boundaries, and locked decisions.
+
+---
+
+# 34. Prototype Implementation Note
+
+The prototype SSOT representation is: provider-listed `ServiceProduct` records feed customer Move-Out Cart selections, submitted carts become request-level `CartItem` records, and Ops supervises each cart item through preferred/backup routing, invitation, intro-fee, release, exception, automation, audit, and health states. The implementation is mock/demo-only.

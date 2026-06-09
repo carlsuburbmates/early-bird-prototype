@@ -1,4 +1,4 @@
-# Running LeaseMate locally (post-migration off Lovable)
+# Running LeaseMate locally (local prototype)
 
 This prototype is frontend-only by design. It runs anywhere a TanStack
 Start + Vite app runs. No Supabase, Stripe, auth, email, SMS, or external

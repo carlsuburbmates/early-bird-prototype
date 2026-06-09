@@ -1543,3 +1543,9 @@ Customers browse service products and submit a coordinated cart.
 Providers accept and pay for exclusive introductions.
 
 The operator supervises request, cart-item, provider, billing, automation, exception, and release states through a full-visibility Operations Center.
+
+---
+
+# 15. Prototype Implementation Note
+
+The mock workflow represents submitted Move-Out Carts as requests plus cart items. Each cart item can carry preferred and backup service products/providers, provider invitation state, intro-fee state, customer detail release state, exceptions, automation jobs, and audit events. Payment actions in the prototype are demo operator confirmations only.

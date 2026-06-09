@@ -2079,3 +2079,9 @@ The customer experience should feel like a service marketplace with a non-paymen
 The provider experience should make service-product listing and payment-gated introductions clear.
 
 The Operations Center should make every workflow state visible.
+
+---
+
+# 11. Prototype Implementation Note
+
+The Operations Center wireframes are implemented in the prototype as mock cart-item workflow screens: Active Requests summarises cart/routing/billing/release state, Request Detail centers on a Cart Routing Matrix, Provider Queue shows live invitations, Billing Queue shows the exact cart item and service product being unlocked, and Providers/Health surface supply coverage.

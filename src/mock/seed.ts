@@ -14,6 +14,8 @@ import type {
   ProviderInvitation,
   RequestNote,
   AutomationJob,
+  CartItem,
+  ServiceProduct,
   ServiceCategory,
 } from "./types";
 import { INTRODUCTION_FEES, SLA, addHours, addMinutes, newId, sumRanges } from "./utils";
@@ -66,85 +68,244 @@ function provider(
 }
 
 const PROVIDERS: Provider[] = [
-  provider("prov_north_movers", "Northside Movers", ["removalist"], ["Northcote", "Thornbury", "Brunswick", "Preston", "Coburg"], {
-    removalist: P(450, 1200),
-  }, 4.8),
-  provider("prov_yarra_movers", "Yarra Removals", ["removalist"], ["Richmond", "Collingwood", "Fitzroy", "Carlton", "Hawthorn"], {
-    removalist: P(500, 1400),
-  }, 4.5),
-  provider("prov_bayside_movers", "Bayside Move Co.", ["removalist", "storage"], ["St Kilda", "South Yarra", "Hawthorn"], {
-    removalist: P(600, 1500),
-    storage: P(120, 380),
-  }, 4.4),
-  provider("prov_sparkle_clean", "Sparkle End-of-Lease", ["eol_cleaning", "carpet_cleaning"], ["Northcote", "Thornbury", "Brunswick", "Fitzroy"], {
-    eol_cleaning: P(280, 650),
-    carpet_cleaning: P(120, 280),
-  }, 4.9),
-  provider("prov_bond_clean", "BondBack Cleaners", ["eol_cleaning"], ["Richmond", "South Yarra", "St Kilda", "Hawthorn"], {
-    eol_cleaning: P(320, 700),
-  }, 4.7),
-  provider("prov_west_clean", "Westside Cleaning Co.", ["eol_cleaning", "carpet_cleaning"], ["Footscray", "Brunswick", "Coburg"], {
-    eol_cleaning: P(260, 600),
-    carpet_cleaning: P(110, 240),
-  }, 4.3),
-  provider("prov_carpet_pros", "Carpet Pros Melbourne", ["carpet_cleaning"], SUBURBS, {
-    carpet_cleaning: P(130, 320),
-  }, 4.6),
-  provider("prov_haul_away", "Haul Away Rubbish", ["rubbish_removal"], ["Northcote", "Preston", "Coburg", "Brunswick", "Footscray"], {
-    rubbish_removal: P(100, 450),
-  }, 4.5),
-  provider("prov_quick_skips", "Quick Skip Removals", ["rubbish_removal"], ["Richmond", "Collingwood", "Hawthorn"], {
-    rubbish_removal: P(120, 500),
-  }, 4.2),
-  provider("prov_safestore", "SafeStore Self Storage", ["storage"], ["Brunswick", "Preston", "Coburg"], {
-    storage: P(95, 320),
-  }, 4.7),
-  provider("prov_fix_it", "Fix-It Handyman", ["handyman"], SUBURBS, {
-    handyman: P(120, 480),
-  }, 4.4),
-  provider("prov_connectu", "ConnectU Utilities", ["utilities"], SUBURBS, {
-    utilities: P(0, 60),
-  }, 4.6),
+  provider(
+    "prov_north_movers",
+    "Northside Movers",
+    ["removalist"],
+    ["Northcote", "Thornbury", "Brunswick", "Preston", "Coburg"],
+    {
+      removalist: P(450, 1200),
+    },
+    4.8,
+  ),
+  provider(
+    "prov_yarra_movers",
+    "Yarra Removals",
+    ["removalist"],
+    ["Richmond", "Collingwood", "Fitzroy", "Carlton", "Hawthorn"],
+    {
+      removalist: P(500, 1400),
+    },
+    4.5,
+  ),
+  provider(
+    "prov_bayside_movers",
+    "Bayside Move Co.",
+    ["removalist", "storage"],
+    ["St Kilda", "South Yarra", "Hawthorn"],
+    {
+      removalist: P(600, 1500),
+      storage: P(120, 380),
+    },
+    4.4,
+  ),
+  provider(
+    "prov_sparkle_clean",
+    "Sparkle End-of-Lease",
+    ["eol_cleaning", "carpet_cleaning"],
+    ["Northcote", "Thornbury", "Brunswick", "Fitzroy"],
+    {
+      eol_cleaning: P(280, 650),
+      carpet_cleaning: P(120, 280),
+    },
+    4.9,
+  ),
+  provider(
+    "prov_bond_clean",
+    "BondBack Cleaners",
+    ["eol_cleaning"],
+    ["Richmond", "South Yarra", "St Kilda", "Hawthorn"],
+    {
+      eol_cleaning: P(320, 700),
+    },
+    4.7,
+  ),
+  provider(
+    "prov_west_clean",
+    "Westside Cleaning Co.",
+    ["eol_cleaning", "carpet_cleaning"],
+    ["Footscray", "Brunswick", "Coburg"],
+    {
+      eol_cleaning: P(260, 600),
+      carpet_cleaning: P(110, 240),
+    },
+    4.3,
+  ),
+  provider(
+    "prov_carpet_pros",
+    "Carpet Pros Melbourne",
+    ["carpet_cleaning"],
+    SUBURBS,
+    {
+      carpet_cleaning: P(130, 320),
+    },
+    4.6,
+  ),
+  provider(
+    "prov_haul_away",
+    "Haul Away Rubbish",
+    ["rubbish_removal"],
+    ["Northcote", "Preston", "Coburg", "Brunswick", "Footscray"],
+    {
+      rubbish_removal: P(100, 450),
+    },
+    4.5,
+  ),
+  provider(
+    "prov_quick_skips",
+    "Quick Skip Removals",
+    ["rubbish_removal"],
+    ["Richmond", "Collingwood", "Hawthorn"],
+    {
+      rubbish_removal: P(120, 500),
+    },
+    4.2,
+  ),
+  provider(
+    "prov_safestore",
+    "SafeStore Self Storage",
+    ["storage"],
+    ["Brunswick", "Preston", "Coburg"],
+    {
+      storage: P(95, 320),
+    },
+    4.7,
+  ),
+  provider(
+    "prov_fix_it",
+    "Fix-It Handyman",
+    ["handyman"],
+    SUBURBS,
+    {
+      handyman: P(120, 480),
+    },
+    4.4,
+  ),
+  provider(
+    "prov_connectu",
+    "ConnectU Utilities",
+    ["utilities"],
+    SUBURBS,
+    {
+      utilities: P(0, 60),
+    },
+    4.6,
+  ),
 ];
 
 // Additional providers to reach 20+ and to cover scenarios where every
 // in-suburb option is exhausted (decline / expire / all-declined paths).
 PROVIDERS.push(
-  provider("prov_inner_movers", "Inner City Removals", ["removalist"], ["Carlton", "Fitzroy", "Collingwood", "Richmond"], {
-    removalist: P(520, 1350),
-  }, 4.6),
-  provider("prov_west_movers", "Westgate Movers", ["removalist"], ["Footscray", "Brunswick"], {
-    removalist: P(420, 1150),
-  }, 4.2),
-  provider("prov_two_guys", "Two Guys & a Truck", ["removalist", "rubbish_removal"], ["Hawthorn", "South Yarra", "St Kilda", "Richmond"], {
-    removalist: P(380, 980),
-    rubbish_removal: P(140, 420),
-  }, 4.1),
-  provider("prov_green_clean", "GreenLeaf Cleaning", ["eol_cleaning", "carpet_cleaning"], ["Preston", "Coburg", "Thornbury"], {
-    eol_cleaning: P(290, 640),
-    carpet_cleaning: P(125, 260),
-  }, 4.5),
-  provider("prov_southside_clean", "Southside Bond Cleans", ["eol_cleaning"], ["South Yarra", "St Kilda"], {
-    eol_cleaning: P(340, 720),
-  }, 4.4),
-  provider("prov_steamline", "SteamLine Carpets", ["carpet_cleaning"], ["Footscray", "Brunswick", "Coburg", "Preston"], {
-    carpet_cleaning: P(115, 280),
-  }, 4.3),
-  provider("prov_clear_outs", "ClearOuts Rubbish", ["rubbish_removal"], ["South Yarra", "St Kilda", "Hawthorn"], {
-    rubbish_removal: P(130, 480),
-  }, 4.0),
-  provider("prov_lock_n_store", "Lock-n-Store Self Storage", ["storage"], ["Richmond", "Collingwood", "Hawthorn", "South Yarra"], {
-    storage: P(110, 360),
-  }, 4.5),
-  provider("prov_handy_heroes", "Handy Heroes", ["handyman"], ["Northcote", "Thornbury", "Brunswick", "Fitzroy"], {
-    handyman: P(140, 520),
-  }, 4.6),
-  provider("prov_powerline", "PowerLine Connections", ["utilities"], SUBURBS, {
-    utilities: P(0, 80),
-  }, 4.3),
+  provider(
+    "prov_inner_movers",
+    "Inner City Removals",
+    ["removalist"],
+    ["Carlton", "Fitzroy", "Collingwood", "Richmond"],
+    {
+      removalist: P(520, 1350),
+    },
+    4.6,
+  ),
+  provider(
+    "prov_west_movers",
+    "Westgate Movers",
+    ["removalist"],
+    ["Footscray", "Brunswick"],
+    {
+      removalist: P(420, 1150),
+    },
+    4.2,
+  ),
+  provider(
+    "prov_two_guys",
+    "Two Guys & a Truck",
+    ["removalist", "rubbish_removal"],
+    ["Hawthorn", "South Yarra", "St Kilda", "Richmond"],
+    {
+      removalist: P(380, 980),
+      rubbish_removal: P(140, 420),
+    },
+    4.1,
+  ),
+  provider(
+    "prov_green_clean",
+    "GreenLeaf Cleaning",
+    ["eol_cleaning", "carpet_cleaning"],
+    ["Preston", "Coburg", "Thornbury"],
+    {
+      eol_cleaning: P(290, 640),
+      carpet_cleaning: P(125, 260),
+    },
+    4.5,
+  ),
+  provider(
+    "prov_southside_clean",
+    "Southside Bond Cleans",
+    ["eol_cleaning"],
+    ["South Yarra", "St Kilda"],
+    {
+      eol_cleaning: P(340, 720),
+    },
+    4.4,
+  ),
+  provider(
+    "prov_steamline",
+    "SteamLine Carpets",
+    ["carpet_cleaning"],
+    ["Footscray", "Brunswick", "Coburg", "Preston"],
+    {
+      carpet_cleaning: P(115, 280),
+    },
+    4.3,
+  ),
+  provider(
+    "prov_clear_outs",
+    "ClearOuts Rubbish",
+    ["rubbish_removal"],
+    ["South Yarra", "St Kilda", "Hawthorn"],
+    {
+      rubbish_removal: P(130, 480),
+    },
+    4.0,
+  ),
+  provider(
+    "prov_lock_n_store",
+    "Lock-n-Store Self Storage",
+    ["storage"],
+    ["Richmond", "Collingwood", "Hawthorn", "South Yarra"],
+    {
+      storage: P(110, 360),
+    },
+    4.5,
+  ),
+  provider(
+    "prov_handy_heroes",
+    "Handy Heroes",
+    ["handyman"],
+    ["Northcote", "Thornbury", "Brunswick", "Fitzroy"],
+    {
+      handyman: P(140, 520),
+    },
+    4.6,
+  ),
+  provider(
+    "prov_powerline",
+    "PowerLine Connections",
+    ["utilities"],
+    SUBURBS,
+    {
+      utilities: P(0, 80),
+    },
+    4.3,
+  ),
 );
 
-function customer(id: string, name: string, suburb: string, propertySize: Customer["propertySize"]): Customer {
+function customer(
+  id: string,
+  name: string,
+  suburb: string,
+  propertySize: Customer["propertySize"],
+): Customer {
   return {
     id,
     name,
@@ -162,7 +323,11 @@ function customer(id: string, name: string, suburb: string, propertySize: Custom
 }
 
 const CUSTOMERS: Customer[] = [
-  customer("cust_demo", "Alex Renter", "Northcote", "2br"),
+  {
+    ...customer("cust_demo", "Alex Renter", "Northcote", "2br"),
+    toAddress: "88 Spencer St, Melbourne VIC",
+    notes: "2-bedroom apartment move — Northcote to inner Melbourne",
+  },
   customer("cust_jamie", "Jamie Lee", "Brunswick", "1br"),
   customer("cust_priya", "Priya Shah", "Richmond", "3br"),
   customer("cust_morgan", "Morgan Tan", "St Kilda", "studio"),
@@ -187,7 +352,6 @@ function audit(
   return { id: newId("aud"), entityType, entityId, eventType, at, newState, notes, actor };
 }
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 function buildSeed(): AppState {
   const requests: MoveRequest[] = [];
   const invitations: ProviderInvitation[] = [];
@@ -213,12 +377,17 @@ function buildSeed(): AppState {
   {
     const r: MoveRequest = {
       id: "req_001",
-      customerId: "cust_jamie",
-      services: ["removalist", "eol_cleaning"],
-      selectedProviderIds: { removalist: "prov_north_movers", eol_cleaning: "prov_sparkle_clean" },
-      packageEstimate: est(["removalist", "eol_cleaning"], {
+      customerId: "cust_demo",
+      services: ["removalist", "eol_cleaning", "rubbish_removal"],
+      selectedProviderIds: {
         removalist: "prov_north_movers",
         eol_cleaning: "prov_sparkle_clean",
+        rubbish_removal: "prov_haul_away",
+      },
+      packageEstimate: est(["removalist", "eol_cleaning", "rubbish_removal"], {
+        removalist: "prov_north_movers",
+        eol_cleaning: "prov_sparkle_clean",
+        rubbish_removal: "prov_haul_away",
       }),
       priority: "normal",
       state: "submitted",
@@ -234,7 +403,17 @@ function buildSeed(): AppState {
       scheduledFor: addMinutes(NOW, 1),
       status: "scheduled",
     });
-    audits.push(audit("request", r.id, "request.submitted", r.createdAt, "submitted", "Intake submitted by customer", "customer"));
+    audits.push(
+      audit(
+        "request",
+        r.id,
+        "request.submitted",
+        r.createdAt,
+        "submitted",
+        "Intake submitted by customer",
+        "customer",
+      ),
+    );
   }
 
   // 2) Awaiting provider response
@@ -279,7 +458,9 @@ function buildSeed(): AppState {
       scheduledFor: addHours(NOW, 18),
       status: "scheduled",
     });
-    audits.push(audit("request", r.id, "request.submitted", addHours(NOW, -6), "submitted", "", "customer"));
+    audits.push(
+      audit("request", r.id, "request.submitted", addHours(NOW, -6), "submitted", "", "customer"),
+    );
     audits.push(audit("invitation", inv.id, "invitation.sent", addHours(NOW, -6), "sent"));
   }
 
@@ -330,9 +511,21 @@ function buildSeed(): AppState {
       scheduledFor: addHours(NOW, 4),
       status: "scheduled",
     });
-    audits.push(audit("request", r.id, "request.submitted", r.createdAt, "submitted", "", "customer"));
+    audits.push(
+      audit("request", r.id, "request.submitted", r.createdAt, "submitted", "", "customer"),
+    );
     audits.push(audit("invitation", inv.id, "invitation.sent", r.createdAt, "sent"));
-    audits.push(audit("invitation", inv.id, "invitation.accepted", inv.respondedAt!, "accepted", "Provider accepted", "provider"));
+    audits.push(
+      audit(
+        "invitation",
+        inv.id,
+        "invitation.accepted",
+        inv.respondedAt!,
+        "accepted",
+        "Provider accepted",
+        "provider",
+      ),
+    );
     audits.push(audit("fee", fee.id, "fee.created", inv.respondedAt!, "pending"));
   }
 
@@ -343,7 +536,10 @@ function buildSeed(): AppState {
       customerId: "cust_taylor",
       services: ["removalist", "handyman"],
       selectedProviderIds: { removalist: "prov_bayside_movers", handyman: "prov_fix_it" },
-      packageEstimate: est(["removalist", "handyman"], { removalist: "prov_bayside_movers", handyman: "prov_fix_it" }),
+      packageEstimate: est(["removalist", "handyman"], {
+        removalist: "prov_bayside_movers",
+        handyman: "prov_fix_it",
+      }),
       priority: "normal",
       state: "completed",
       createdAt: addHours(NOW, -72),
@@ -393,11 +589,52 @@ function buildSeed(): AppState {
         toAddress: customerEntity.toAddress,
       },
     });
-    audits.push(audit("request", r.id, "request.submitted", r.createdAt, "submitted", "", "customer"));
-    audits.push(audit("invitation", inv.id, "invitation.accepted", inv.respondedAt!, "accepted", "", "provider"));
-    audits.push(audit("fee", fee.id, "fee.paid", fee.paidAt!, "paid", "Provider paid introduction fee", "provider"));
-    audits.push(audit("release", "rel_004a", "release.created", fee.paidAt!, undefined, "Customer details released"));
-    audits.push(audit("request", r.id, "request.completed", addHours(NOW, -2), "completed", "Operator marked complete", "operator"));
+    audits.push(
+      audit("request", r.id, "request.submitted", r.createdAt, "submitted", "", "customer"),
+    );
+    audits.push(
+      audit(
+        "invitation",
+        inv.id,
+        "invitation.accepted",
+        inv.respondedAt!,
+        "accepted",
+        "",
+        "provider",
+      ),
+    );
+    audits.push(
+      audit(
+        "fee",
+        fee.id,
+        "fee.paid",
+        fee.paidAt!,
+        "paid",
+        "Provider paid introduction fee",
+        "provider",
+      ),
+    );
+    audits.push(
+      audit(
+        "release",
+        "rel_004a",
+        "release.created",
+        fee.paidAt!,
+        undefined,
+        "Customer details released",
+      ),
+    );
+    audits.push(
+      audit(
+        "request",
+        r.id,
+        "request.completed",
+        addHours(NOW, -2),
+        "completed",
+        "Operator marked complete",
+        "operator",
+      ),
+    );
   }
 
   // 5) Declined → routed to next provider (still awaiting)
@@ -444,8 +681,27 @@ function buildSeed(): AppState {
       scheduledFor: addHours(NOW, 22),
       status: "scheduled",
     });
-    audits.push(audit("invitation", inv1.id, "invitation.declined", inv1.respondedAt!, "declined", "Out of service area", "provider"));
-    audits.push(audit("invitation", inv2.id, "invitation.sent", inv2.sentAt!, "sent", "Routed to next provider"));
+    audits.push(
+      audit(
+        "invitation",
+        inv1.id,
+        "invitation.declined",
+        inv1.respondedAt!,
+        "declined",
+        "Out of service area",
+        "provider",
+      ),
+    );
+    audits.push(
+      audit(
+        "invitation",
+        inv2.id,
+        "invitation.sent",
+        inv2.sentAt!,
+        "sent",
+        "Routed to next provider",
+      ),
+    );
   }
 
   // 6) Expired → escalated (open exception)
@@ -482,7 +738,9 @@ function buildSeed(): AppState {
       note: "No further providers available in suburb",
     });
     audits.push(audit("invitation", inv.id, "invitation.expired", inv.expiresAt!, "expired"));
-    audits.push(audit("exception", "exc_006", "exception.opened", addHours(NOW, -12), undefined, "Escalated"));
+    audits.push(
+      audit("exception", "exc_006", "exception.opened", addHours(NOW, -12), undefined, "Escalated"),
+    );
   }
 
   // 7) Payment overdue
@@ -580,9 +838,19 @@ function buildSeed(): AppState {
       createdAt: addHours(NOW, -36),
     };
     requests.push(r);
-    audits.push(audit("request", r.id, "request.submitted", r.createdAt, "submitted", "", "customer"));
     audits.push(
-      audit("request", r.id, "request.cancelled", addHours(NOW, -30), "cancelled", "Customer changed plans", "customer"),
+      audit("request", r.id, "request.submitted", r.createdAt, "submitted", "", "customer"),
+    );
+    audits.push(
+      audit(
+        "request",
+        r.id,
+        "request.cancelled",
+        addHours(NOW, -30),
+        "cancelled",
+        "Customer changed plans",
+        "customer",
+      ),
     );
   }
 
@@ -600,7 +868,13 @@ function buildSeed(): AppState {
       createdAt: addHours(NOW, -40),
     };
     requests.push(r);
-    const decliners = ["prov_steamline", "prov_green_clean", "prov_west_clean", "prov_sparkle_clean", "prov_carpet_pros"];
+    const decliners = [
+      "prov_steamline",
+      "prov_green_clean",
+      "prov_west_clean",
+      "prov_sparkle_clean",
+      "prov_carpet_pros",
+    ];
     decliners.forEach((pid, i) => {
       const inv: ProviderInvitation = {
         id: `inv_010${String.fromCharCode(97 + i)}`,
@@ -614,7 +888,15 @@ function buildSeed(): AppState {
       };
       invitations.push(inv);
       audits.push(
-        audit("invitation", inv.id, "invitation.declined", inv.respondedAt!, "declined", "Booked out", "provider"),
+        audit(
+          "invitation",
+          inv.id,
+          "invitation.declined",
+          inv.respondedAt!,
+          "declined",
+          "Booked out",
+          "provider",
+        ),
       );
     });
     exceptions.push({
@@ -625,7 +907,16 @@ function buildSeed(): AppState {
       severity: "critical",
       note: "No remaining carpet cleaners in suburb",
     });
-    audits.push(audit("exception", "exc_010", "exception.opened", addHours(NOW, -16), undefined, "All providers declined"));
+    audits.push(
+      audit(
+        "exception",
+        "exc_010",
+        "exception.opened",
+        addHours(NOW, -16),
+        undefined,
+        "All providers declined",
+      ),
+    );
   }
 
   // 11) Details released but not yet completed — provider has the customer
@@ -686,9 +977,28 @@ function buildSeed(): AppState {
         toAddress: c.toAddress,
       },
     });
-    audits.push(audit("invitation", inv.id, "invitation.accepted", inv.respondedAt!, "accepted", "", "provider"));
+    audits.push(
+      audit(
+        "invitation",
+        inv.id,
+        "invitation.accepted",
+        inv.respondedAt!,
+        "accepted",
+        "",
+        "provider",
+      ),
+    );
     audits.push(audit("fee", fee.id, "fee.paid", fee.paidAt!, "paid", "", "provider"));
-    audits.push(audit("release", "rel_011a", "release.created", fee.paidAt!, undefined, "Customer details released"));
+    audits.push(
+      audit(
+        "release",
+        "rel_011a",
+        "release.created",
+        fee.paidAt!,
+        undefined,
+        "Customer details released",
+      ),
+    );
   }
 
   return {
@@ -711,6 +1021,247 @@ function buildSeed(): AppState {
   };
 }
 
+function productTitle(category: ServiceCategory, providerName: string) {
+  const label: Record<ServiceCategory, string> = {
+    removalist: "2-bedroom apartment move",
+    eol_cleaning: "2-bedroom apartment end-of-lease clean",
+    carpet_cleaning: "Apartment carpet steam clean",
+    rubbish_removal: "Small move-out rubbish removal",
+    storage: "Short-term move-out storage",
+    handyman: "Move-out patch and repair",
+    utilities: "Move-out utilities connection",
+  };
+  return `${label[category]} — ${providerName}`;
+}
+
+function serviceProduct(provider: Provider, category: ServiceCategory): ServiceProduct {
+  const range = provider.pricingRanges[category] ?? provider.jobSizeRange;
+  const isMove = category === "removalist";
+  const isRubbish = category === "rubbish_removal";
+  return {
+    id: `prod_${provider.id.replace(/^prov_/, "")}_${category}`,
+    providerId: provider.id,
+    category,
+    title: productTitle(category, provider.businessName),
+    description: `Demo provider-listed ${category.replace(/_/g, " ")} product for LeaseMate Move-Out Cart routing.`,
+    serviceAreas: provider.serviceAreas,
+    propertyTypes: provider.propertyTypes,
+    pickupCatchments: isMove || isRubbish ? provider.serviceAreas : undefined,
+    destinationCatchments: isMove
+      ? ["Melbourne", "Carlton", "Fitzroy", "Richmond", "South Yarra", "Docklands"]
+      : undefined,
+    includedServices:
+      category === "eol_cleaning"
+        ? ["Kitchen and bathroom clean", "Floors and surfaces", "Inspection-ready checklist"]
+        : category === "removalist"
+          ? ["Two-person crew", "Truck", "Standard loading and unload"]
+          : category === "rubbish_removal"
+            ? ["Small furniture pickup", "Tip run", "Sweep after removal"]
+            : ["Standard service scope"],
+    excludedServices: ["Customer payment processing", "After-hours surcharge unless listed"],
+    addOns:
+      category === "removalist"
+        ? ["Packing boxes", "Stairs surcharge"]
+        : category === "eol_cleaning"
+          ? ["Oven deep clean", "Balcony clean"]
+          : [],
+    estimatedRange: range,
+    status: provider.status,
+  };
+}
+
+function deriveCartState(
+  req: MoveRequest,
+  invitation?: ProviderInvitation,
+  fee?: IntroductionFee,
+  release?: CustomerRelease,
+): CartItem["state"] {
+  if (req.state === "cancelled") return "cancelled";
+  if (req.state === "completed") return "completed";
+  if (req.state === "escalated") return "escalated";
+  if (release) return "released";
+  if (fee?.status === "paid") return "paid";
+  if (fee && (fee.status === "pending" || fee.status === "overdue")) return "payment_pending";
+  if (invitation?.state === "accepted") return "accepted";
+  if (invitation?.state === "declined")
+    return invitation.position === "backup" ? "unresolved" : "preferred_declined";
+  if (invitation?.state === "expired")
+    return invitation.position === "backup" ? "unresolved" : "preferred_expired";
+  if (invitation?.state === "sent" || invitation?.state === "viewed")
+    return invitation.position === "backup" ? "backup_invited" : "preferred_invited";
+  return "not_started";
+}
+
+function alignOpsModel(state: AppState): AppState {
+  const serviceProducts = state.providers.flatMap((provider) =>
+    provider.categories.map((category) => serviceProduct(provider, category)),
+  );
+  const productsByProviderCategory = new Map(
+    serviceProducts.map((product) => [`${product.providerId}:${product.category}`, product]),
+  );
+
+  const cartItems: CartItem[] = state.requests.flatMap((request) =>
+    request.services.map((category) => {
+      const preferredProviderId =
+        request.selectedProviderIds[category] ??
+        state.providers.find((provider) => provider.categories.includes(category))?.id ??
+        state.providers[0].id;
+      const backupProviderId = state.providers.find(
+        (provider) =>
+          provider.id !== preferredProviderId &&
+          provider.status === "active" &&
+          provider.categories.includes(category),
+      )?.id;
+      const preferredProduct =
+        productsByProviderCategory.get(`${preferredProviderId}:${category}`) ??
+        serviceProducts.find((product) => product.category === category)!;
+      const backupProduct = backupProviderId
+        ? productsByProviderCategory.get(`${backupProviderId}:${category}`)
+        : undefined;
+      return {
+        id: `ci_${request.id.replace(/^req_/, "")}_${category}`,
+        requestId: request.id,
+        category,
+        preferredServiceProductId: preferredProduct.id,
+        backupServiceProductId: backupProduct?.id,
+        preferredProviderId,
+        backupProviderId,
+        estimatedRange: preferredProduct.estimatedRange,
+        nextAction: request.nextAction,
+        slaDueAt: request.slaDueAt,
+        state: "not_started",
+      } satisfies CartItem;
+    }),
+  );
+
+  const itemByRequestCategory = new Map(
+    cartItems.map((item) => [`${item.requestId}:${item.category}`, item]),
+  );
+  const invitationCounts = new Map<string, number>();
+  const invitations = state.invitations.map((invitation) => {
+    const item = itemByRequestCategory.get(`${invitation.requestId}:${invitation.category}`);
+    const key = `${invitation.requestId}:${invitation.category}`;
+    const count = invitationCounts.get(key) ?? 0;
+    invitationCounts.set(key, count + 1);
+    const position =
+      invitation.providerId === item?.preferredProviderId && count === 0 ? "preferred" : "backup";
+    const product = productsByProviderCategory.get(
+      `${invitation.providerId}:${invitation.category}`,
+    );
+    return { ...invitation, cartItemId: item?.id, serviceProductId: product?.id, position };
+  });
+
+  const fees = state.fees.map((fee) => {
+    const invitation = invitations.find((inv) => inv.id === fee.invitationId);
+    return {
+      ...fee,
+      cartItemId: invitation?.cartItemId,
+      serviceProductId: invitation?.serviceProductId,
+      position: invitation?.position,
+    };
+  });
+
+  const releases = state.releases.map((release) => {
+    const fee = fees.find((f) => f.id === release.feeId);
+    return {
+      ...release,
+      cartItemId: fee?.cartItemId,
+      serviceProductId: fee?.serviceProductId,
+      releaseState: "released" as const,
+    };
+  });
+
+  const hydratedCartItems = cartItems.map((item) => {
+    const itemInvitations = invitations.filter((inv) => inv.cartItemId === item.id);
+    const activeInvitation =
+      itemInvitations.find((inv) => ["sent", "viewed", "accepted"].includes(inv.state)) ??
+      itemInvitations.at(-1);
+    const fee = fees.find((f) => f.cartItemId === item.id);
+    const release = releases.find((r) => r.cartItemId === item.id);
+    return {
+      ...item,
+      activeServiceProductId: activeInvitation?.serviceProductId,
+      positionInProgress: activeInvitation?.position,
+      state: deriveCartState(
+        state.requests.find((request) => request.id === item.requestId)!,
+        activeInvitation,
+        fee,
+        release,
+      ),
+      nextAction: release
+        ? "Provider has customer details"
+        : fee?.status === "pending"
+          ? "Confirm payment received"
+          : item.nextAction,
+    };
+  });
+
+  const cartItemByRequestCategory = new Map(
+    hydratedCartItems.map((item) => [`${item.requestId}:${item.category}`, item]),
+  );
+  const automations = state.automations.map((job) => {
+    const invitation = invitations.find((inv) => inv.id === job.invitationId);
+    const fee = fees.find((f) => f.id === job.feeId);
+    const cartItemId = invitation?.cartItemId ?? fee?.cartItemId;
+    const serviceProductId = invitation?.serviceProductId ?? fee?.serviceProductId;
+    return { ...job, cartItemId, serviceProductId };
+  });
+  const exceptions = state.exceptions.map((exception) => {
+    const request = state.requests.find((req) => req.id === exception.requestId);
+    const category = request?.services[0];
+    const item = category
+      ? cartItemByRequestCategory.get(`${exception.requestId}:${category}`)
+      : undefined;
+    return {
+      ...exception,
+      cartItemId: item?.id,
+      serviceProductId: item?.activeServiceProductId ?? item?.preferredServiceProductId,
+    };
+  });
+  const audit = state.audit.concat([
+    auditEvent(
+      "service_product",
+      "prod_north_movers_removalist",
+      "service_product.active",
+      addMinutes(NOW, -70),
+      "active",
+      "Provider-listed 2-bedroom apartment move product available",
+    ),
+    auditEvent(
+      "cart_item",
+      "ci_001_removalist",
+      "cart_item.preferred_selected",
+      addMinutes(NOW, -10),
+      "not_started",
+      "Preferred/backup routing created for Northcote to inner Melbourne move",
+    ),
+  ]);
+
+  return {
+    ...state,
+    serviceProducts,
+    cartItems: hydratedCartItems,
+    invitations,
+    fees,
+    releases,
+    automations,
+    exceptions,
+    audit,
+  };
+}
+
+function auditEvent(
+  entityType: AuditEvent["entityType"],
+  entityId: string,
+  eventType: string,
+  at: string,
+  newState?: string,
+  notes?: string,
+  actor: AuditEvent["actor"] = "system",
+): AuditEvent {
+  return { id: newId("aud"), entityType, entityId, eventType, at, newState, notes, actor };
+}
+
 export function freshSeed(): AppState {
-  return buildSeed();
+  return alignOpsModel(buildSeed());
 }
